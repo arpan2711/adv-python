@@ -115,6 +115,22 @@ def make_shell_context(self) -> dict:
         rv.update(processor())
     return rv
 ```
+**Comments**: 
+- **self**: 
+  This is a reference to the instance of the class to which this method belongs.
+  It doesn't have a type hint because it's a convention in Python for instance methods.
+  
+- **resource: str**: 
+  This indicates that the `resource` parameter is expected to be of type `str` (a string).
+  
+- **mode: str = "rb"**: 
+  This indicates that the `mode` parameter is expected to be of type `str` (a string).
+  It has a default value of "rb".
+  
+- **-> t.IO[t.AnyStr]**: 
+  The function is expected to return an object that matches the type `t.IO[t.AnyStr]`.
+
+
 ```python
 def open_instance_resource(self, resource: str, mode: str = "rb") -> t.IO[t.AnyStr]:
     """Opens a resource from the application's instance folder
