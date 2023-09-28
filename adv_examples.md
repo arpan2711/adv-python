@@ -12,7 +12,7 @@
 ## 1. Decorators
 **Example 1a**:
   
- **Link**: https://github.com/pydoit/doit
+ **Link**: https://github.com/pydoit/doit/blob/master/doit/control.py
 
 **Comments**: 
 
@@ -31,9 +31,13 @@ def no_none(decorated):
 
 **Example 1b**:
   
- **Link**: https://github.com/pydoit/doit
+ **Link**: https://github.com/pydoit/doit/blob/master/doc/samples/my_tasks.py
 
-**Comments**: 
+**Comments**: The main purpose of this decorator seems to be to attach metadata to functions regarding their input and output files. This metadata can later be accessed using the task_metadata attribute of the decorated functions. This can be useful in scenarios where you want to keep track of the files a function interacts with, especially in data processing or pipeline workflows.
+
+the 'simple' function is decorated without any parameters. So, an empty task_metadata dictionary is attached to it.
+
+the 'pre' function is decorated with a parameter output which is a list containing 'my_input.txt'. The task_metadata attribute of the pre function will be {'output': ['my_input.txt']}.
 
 ```python
 def task(*fn, **kwargs):
@@ -53,6 +57,11 @@ def task(*fn, **kwargs):
 @task
 def simple():
     print("thats all folks")
+
+@task(output=['my_input.txt'])
+def pre(to_create):
+    with open(to_create[0], 'w') as fp:
+        fp.write('foo')
 ```
 
 ---

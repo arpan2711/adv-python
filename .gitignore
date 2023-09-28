@@ -1,0 +1,8 @@
+# Ignore all files
+*
+
+# But don't ignore the .gitignore file itself (this is optional but can be useful)
+!.gitignore
+
+# Don't ignore myFile.txt
+!adv_examples.md
