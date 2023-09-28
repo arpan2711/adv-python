@@ -7,7 +7,11 @@
 6. [Duck Typing](#6-duck-typing)
 7. [Properties](#7-properties)
 8. [Private Attributes](#8-private-attributes)
-
+9. [Lambda](#9-lambda)
+10. [Recursion](#10-recursion)
+11. [Context Managers](#11-context-managers)
+12. [Map, Filter, and Zip Functions](#12-map-filter-and-zip-functions)
+13. [Regex](#13-regex)
 
 ## 1. Decorators
 **Example 1a**:
