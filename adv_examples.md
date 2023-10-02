@@ -2,7 +2,7 @@
 1. [Decorators](#1-decorators)
 2. [Generators](#2-generators)
 3. [Type Hinting](#3-type-hinting)
-4. [Extension on class basics](#4-extension-on-class-basics)
+4. [Extension on class basics (Class Attributes, Class Methods, Static Methods)](#4-extension-on-class-basics)
 5. [Class Inheritance](#5-class-inheritance)
 6. [Duck Typing](#6-duck-typing)
 7. [Properties](#7-properties)
@@ -12,6 +12,18 @@
 11. [Context Managers](#11-context-managers)
 12. [Map, Filter, and Zip Functions](#12-map-filter-and-zip-functions)
 13. [Regex](#13-regex)
+
+## Github projects 
+
+Using production code from the following projects to find examples-
+
+**flask**  The Python micro framework for building web applications.
+flask.palletsprojects.com 
+https://github.com/pallets/flask
+\
+\
+**pydoit** task management & automation tool 
+https://github.com/pydoit/doit
 
 ## 1. Decorators
 **Example 1a**:
@@ -74,22 +86,54 @@ def pre(to_create):
 
 **Example 2a**:
   
- **Link**: 
+ **Link**: samples/compile_pathlib.py
 
 **Comments**: 
 
 ```python
-# Python code for example 2a goes here
+from pathlib import Path
+
+def task_compile():
+    working_directory = Path('.')
+    # Path.glob returns an iterator so turn it into a list
+    headers = list(working_directory.glob('*.h'))
+    for source_file in working_directory.glob('*.c'):
+        object_file = source_file.with_suffix('.o')
+        yield {
+            'name': object_file.name,
+            'actions': [['cc', '-c', source_file]],
+            'file_dep': [source_file] + headers,
+            'targets': [object_file],
+        }
 ```
 
 **Example 2b**:
   
- **Link**: 
+ **Link**: samples/subtasks.py
 
 **Comments**: 
 
 ```python
-# Python code for example 2b goes here
+def task_create_file():
+    for i in range(3):
+        filename = "file%d.txt" % i
+        yield {'name': filename,
+               'actions': ["touch %s" % filename]}
+```
+
+**Example 2c**:
+  
+ **Link**: doit/control.py
+
+**Comments**: 
+
+```python
+    def step(self):
+        """get node's next step"""
+        try:
+            return next(self.generator)
+        except StopIteration:
+            return None
 ```
 
 ---
@@ -160,6 +204,7 @@ def open_instance_resource(self, resource: str, mode: str = "rb") -> t.IO[t.AnyS
 ---
 
 ## 4. Extension on class basics
+## 
 
 **Example 4a**:
   
