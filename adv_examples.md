@@ -17,12 +17,12 @@
 
 Using production code from the following projects to find examples-
 
-**flask**  The Python micro framework for building web applications.
+**flask -**  The Python micro framework for building web applications.
 flask.palletsprojects.com 
 https://github.com/pallets/flask
 \
 \
-**pydoit** task management & automation tool 
+**pydoit -** Task management & automation tool 
 https://github.com/pydoit/doit
 
 ## 1. Decorators
@@ -88,7 +88,9 @@ def pre(to_create):
   
  **Link**: samples/compile_pathlib.py
 
-**Comments**: 
+**Comments**: task_compile function uses the generator mechanism in Python to produce a series of tasks for compiling C source files. Each task is represented as a dictionary with details about how to compile the source file and its dependencies.
+\
+The use of yield makes task_compile a generator function. Instead of returning a single value (like a list of tasks), it yields a series of values (each task, one by one).
 
 ```python
 from pathlib import Path
@@ -109,9 +111,9 @@ def task_compile():
 
 **Example 2b**:
   
- **Link**: samples/subtasks.py
+ **Link**: doit/samples/subtasks.py
 
-**Comments**: 
+**Comments**: When you call this function, it will not execute the loop immediately. Instead, it will return a generator object. As you iterate over this generator (e.g., using a for loop or the next function), it will execute the loop and yield tasks one by one.
 
 ```python
 def task_create_file():
@@ -204,26 +206,338 @@ def open_instance_resource(self, resource: str, mode: str = "rb") -> t.IO[t.AnyS
 ---
 
 ## 4. Extension on class basics
-## 
+### (Class Attributes, Class Methods, Static Methods)
 
-**Example 4a**:
+**Example 4a**: class attributes
   
- **Link**: 
+ **Link**: flask/tests/test_cli.py
 
 **Comments**: 
 
 ```python
-# Python code for example 4a goes here
+def test_get_version(test_apps, capsys):
+    class MockCtx:
+        resilient_parsing = False
+        color = None
+
+        def exit(self):
+            return
+
+    ctx = MockCtx()
+    get_version(ctx, None, "test")
+    out, err = capsys.readouterr()
+    assert f"Python {platform.python_version()}" in out
+    assert f"Flask {importlib.metadata.version('flask')}" in out
+    assert f"Werkzeug {importlib.metadata.version('werkzeug')}" in out
+
+```
+flask/examples/tutorial/tests/test_db.py-
+```python
+def test_init_db_command(runner, monkeypatch):
+    class Recorder:
+        called = False
+
+    def fake_init_db():
+        Recorder.called = True
+
+    monkeypatch.setattr("flaskr.db.init_db", fake_init_db)
+    result = runner.invoke(args=["init-db"])
+    assert "Initialized" in result.output
+    assert Recorder.called
 ```
 
-**Example 4b**:
+
+**Example 4b**: class methods and static methods
   
- **Link**: 
+ **Link**: doit/cmd_completion.py
 
 **Comments**: 
 
 ```python
-# Python code for example 4b goes here
+class TabCompletion(DoitCmdBase):
+    """generate scripts for tab-completion
+
+    If hardcode-tasks options is chosen it will get the task
+    list from the current dodo file and include in the completion script.
+    Otherwise the script will dynamically call `doit list` to get the list
+    of tasks.
+
+    If it is completing a sub-task (contains ':' in the name),
+    it will always call doit while evaluating the options.
+
+    """
+    doc_purpose = "generate script for tab-completion"
+    doc_usage = ""
+    doc_description = None
+
+    cmd_options = (opt_shell, opt_hardcode_tasks, )
+
+    def __init__(self, cmds=None, **kwargs):
+        super(TabCompletion, self).__init__(cmds=cmds, **kwargs)
+        self.init_kwargs = kwargs
+        self.init_kwargs['cmds'] = cmds
+        if cmds:
+            self.cmds = cmds.to_dict()  # dict name - Command class
+
+    def execute(self, opt_values, pos_args):
+        if opt_values['shell'] == 'bash':
+            self._generate_bash(opt_values, pos_args)
+        elif opt_values['shell'] == 'zsh':
+            self._generate_zsh(opt_values, pos_args)
+        else:
+            msg = 'Invalid option for --shell "{0}"'
+            raise InvalidCommand(msg.format(opt_values['shell']))
+
+    @classmethod
+    def _bash_cmd_args(cls, cmd):
+        """return case item for completion of specific sub-command"""
+        comp = []
+        if 'TASK' in cmd.doc_usage:
+            comp.append('${tasks}')
+        if 'COMMAND' in cmd.doc_usage:
+            comp.append('${sub_cmds}')
+        if comp:
+            completion = '-W "{0}"'.format(' '.join(comp))
+        else:
+            completion = '-f'  # complete file
+        return bash_subcmd_arg.format(cmd_name=cmd.name, completion=completion)
+
+
+    def _generate_bash(self, opt_values, pos_args):
+        # some applications built with doit do not use dodo.py files
+        for opt in self.get_options():
+            if opt.name == 'dodoFile':
+                get_dodo_part = bash_get_dodo
+                pt_list_param = '--file="$dodof"'
+                break
+        else:
+            get_dodo_part = ''
+            pt_list_param = ''
+
+        # dict with template values
+        pt_bin_name = os.path.split(sys.argv[0])[1]
+        tmpl_vars = {
+            'pt_bin_name': pt_bin_name,
+            'pt_cmds': ' '.join(sorted(self.cmds)),
+            'pt_list_param': pt_list_param,
+        }
+
+        # if hardcode tasks
+        if opt_values['hardcode_tasks']:
+            if getattr(self.loader, 'API', 1) == 2:
+                self.loader.setup(opt_values)
+                self.loader.load_doit_config()
+                self.task_list = self.loader.load_tasks(cmd=self, pos_args=pos_args)
+            else:
+                self.task_list, _ = self.loader.load_tasks(
+                    self, opt_values, pos_args)
+            task_names = (t.name for t in self.task_list if not t.subtask_of)
+            tmpl_vars['pt_tasks'] = '"{0}"'.format(' '.join(sorted(task_names)))
+        else:
+            tmpl_list_cmd = "$({0} list {1} --quiet 2>/dev/null)"
+            tmpl_vars['pt_tasks'] = tmpl_list_cmd.format(pt_bin_name,
+                                                         pt_list_param)
+
+        # case statement to complete sub-commands
+        cmds_args = []
+        for name in sorted(self.cmds):
+            cmd_class = self.cmds[name]
+            cmd = cmd_class(**self.init_kwargs)
+            cmds_args.append(self._bash_cmd_args(cmd))
+        comp_subcmds = ("\n    case ${words[1]} in\n"
+                        + "".join(cmds_args)
+                        + "\n    esac\n")
+
+        template = Template(
+            bash_start + bash_opt_file + get_dodo_part
+            + bash_task_list + bash_first_arg
+            + comp_subcmds + bash_end)
+        self.outstream.write(template.safe_substitute(tmpl_vars))
+
+
+    @staticmethod
+    def _zsh_arg_line(opt):
+        """create a text line for completion of a command arg"""
+        # '(-c|--continue)'{-c,--continue}'[continue executing tasks...]' \
+        # '--db-file[file used to save successful runs]' \
+        if opt.short and opt.long:
+            tmpl = ('"(-{0.short}|--{0.long})"{{-{0.short},--{0.long}}}"'
+                    '[{help}]" \\')
+        elif not opt.short and opt.long:
+            tmpl = '"--{0.long}[{help}]" \\'
+        elif opt.short and not opt.long:
+            tmpl = '"-{0.short}[{help}]" \\'
+        else:  # without short or long options cant be really used
+            return ''
+        ohelp = opt.help.replace(']', r'\]').replace('"', r'\"')
+        return tmpl.format(opt, help=ohelp).replace('\n', ' ')
+
+
+    @classmethod
+    def _zsh_arg_list(cls, cmd):
+        """return list of arguments lines for zsh completion"""
+        args = []
+        for opt in cmd.get_options():
+            args.append(cls._zsh_arg_line(opt))
+        if 'TASK' in cmd.doc_usage:
+            args.append("'*::task:(($tasks))'")
+        if 'COMMAND' in cmd.doc_usage:
+            args.append("'::cmd:(($commands))'")
+        return args
+
+    @classmethod
+    def _zsh_cmd_args(cls, cmd):
+        """create the content for "case" statement with all command options """
+        arg_lines = cls._zsh_arg_list(cmd)
+        tmpl = """
+      ({cmd_name})
+          _command_args=(
+            {args_body}
+            ''
+        )
+      ;;
+"""
+        args_body = '\n            '.join(arg_lines)
+        return tmpl.format(cmd_name=cmd.name, args_body=args_body)
+
+
+    # TODO:
+    # detect correct dodo-file location
+    # complete sub-tasks
+    # task options
+    def _generate_zsh(self, opt_values, pos_args):
+        # deal with doit commands
+        cmds_desc = []
+        cmds_args = []
+        for name in sorted(self.cmds):
+            cmd_class = self.cmds[name]
+            cmd = cmd_class(**self.init_kwargs)
+            cmds_desc.append("    '{0}: {1}'".format(cmd.name, cmd.doc_purpose))
+            cmds_args.append(self._zsh_cmd_args(cmd))
+
+        template_vars = {
+            'pt_bin_name': sys.argv[0].split('/')[-1],
+            'pt_cmds': '\n    '.join(cmds_desc),
+            'pt_cmds_args': '\n'.join(cmds_args),
+        }
+
+        if opt_values['hardcode_tasks']:
+            if getattr(self.loader, 'API', 1) == 2:
+                self.loader.setup(opt_values)
+                self.loader.load_doit_config()
+                self.task_list = self.loader.load_tasks(cmd=self, pos_args=pos_args)
+            else:
+                self.task_list, _ = self.loader.load_tasks(
+                    self, opt_values, pos_args)
+            lines = []
+            for task in self.task_list:
+                if not task.subtask_of:
+                    lines.append("'{0}: {1}'".format(task.name, task.doc))
+            template_vars['pt_tasks'] = '(\n{0}\n)'.format(
+                '\n'.join(sorted(lines)))
+        else:
+            tmp_tasks = Template(
+                '''("${(f)$($pt_bin_name list --template '{name}: {doc}')}")''')
+            template_vars['pt_tasks'] = tmp_tasks.safe_substitute(template_vars)
+
+
+        template = Template(zsh_start)
+        self.outstream.write(template.safe_substitute(template_vars))
+
+```
+
+**Example 4c**: static method
+  
+ **Link**: flask/tests/test_cli.py
+
+**Comments**: 
+
+```python
+def test_find_best_app(test_apps):
+    class Module:
+        app = Flask("appname")
+
+    assert find_best_app(Module) == Module.app
+
+    class Module:
+        application = Flask("appname")
+
+    assert find_best_app(Module) == Module.application
+
+    class Module:
+        myapp = Flask("appname")
+
+    assert find_best_app(Module) == Module.myapp
+
+    class Module:
+        @staticmethod
+        def create_app():
+            return Flask("appname")
+
+    app = find_best_app(Module)
+    assert isinstance(app, Flask)
+    assert app.name == "appname"
+
+    class Module:
+        @staticmethod
+        def create_app(**kwargs):
+            return Flask("appname")
+
+    app = find_best_app(Module)
+    assert isinstance(app, Flask)
+    assert app.name == "appname"
+
+    class Module:
+        @staticmethod
+        def make_app():
+            return Flask("appname")
+
+    app = find_best_app(Module)
+    assert isinstance(app, Flask)
+    assert app.name == "appname"
+
+    class Module:
+        myapp = Flask("appname1")
+
+        @staticmethod
+        def create_app():
+            return Flask("appname2")
+
+    assert find_best_app(Module) == Module.myapp
+
+    class Module:
+        myapp = Flask("appname1")
+
+        @staticmethod
+        def create_app():
+            return Flask("appname2")
+
+    assert find_best_app(Module) == Module.myapp
+
+    class Module:
+        pass
+
+    pytest.raises(NoAppException, find_best_app, Module)
+
+    class Module:
+        myapp1 = Flask("appname1")
+        myapp2 = Flask("appname2")
+
+    pytest.raises(NoAppException, find_best_app, Module)
+
+    class Module:
+        @staticmethod
+        def create_app(foo, bar):
+            return Flask("appname2")
+
+    pytest.raises(NoAppException, find_best_app, Module)
+
+    class Module:
+        @staticmethod
+        def create_app():
+            raise TypeError("bad bad factory!")
+
+    pytest.raises(TypeError, find_best_app, Module)
 ```
 
 ---
@@ -237,7 +551,24 @@ def open_instance_resource(self, resource: str, mode: str = "rb") -> t.IO[t.AnyS
 **Comments**: 
 
 ```python
-# Python code for example 5a goes here
+class DoitCmdBase(Command):
+    """
+    subclass must define:
+    cmd_options => list of option dictionary (see CmdOption)
+    _execute => method, argument names must be option names
+    """
+    base_options = (opt_depfile, opt_backend, opt_codec,
+                    opt_check_file_uptodate)
+
+    def __init__(self, task_loader, cmds=None, **kwargs):
+        super(DoitCmdBase, self).__init__(**kwargs)
+        self.sel_tasks = None  # selected tasks for command
+        self.sel_default_tasks = True  # False if tasks were specified from command line
+        self.dep_manager = None
+        self.outstream = sys.stdout
+        self.loader = task_loader
+        self._backends = self.get_backends()
+
 ```
 
 **Example 5b**:
@@ -247,7 +578,30 @@ def open_instance_resource(self, resource: str, mode: str = "rb") -> t.IO[t.AnyS
 **Comments**: 
 
 ```python
-# Python code for example 5b goes here
+import sys
+
+from doit.task import dict_to_task
+from doit.cmd_base import TaskLoader2 # IMPORTING CLASS
+from doit.doit_cmd import DoitMain
+
+my_builtin_task = {
+    'name': 'sample_task',
+    'actions': ['echo hello from built in'],
+    'doc': 'sample doc',
+}
+
+
+class MyLoader(TaskLoader2): # CLASS INHERITANCE
+    def setup(self, opt_values):
+        pass
+
+    def load_doit_config(self):
+        return {'verbosity': 2}
+
+    def load_tasks(self, cmd, pos_args):
+        task_list = [dict_to_task(my_builtin_task)]
+        return task_list
+
 ```
 
 ---
@@ -280,12 +634,156 @@ def open_instance_resource(self, resource: str, mode: str = "rb") -> t.IO[t.AnyS
 
 **Example 7a**:
   
- **Link**: 
+ **Link**: doit/cmd_base.py
 
 **Comments**: 
 
 ```python
-# Python code for example 7a goes here
+class Command(object):
+    """third-party should subclass this for commands that do no use tasks
+
+    :cvar name: (str) name of sub-cmd to be use from cmdline
+    :cvar doc_purpose: (str) single line cmd description
+    :cvar doc_usage: (str) describe accepted parameters
+    :cvar doc_description: (str) long description/help for cmd
+    :cvar cmd_options:
+          (list of dict) see cmdparse.CmdOption for dict format
+    """
+
+    # if not specified uses the class name
+    name = None
+
+    # doc attributes, should be sub-classed
+    doc_purpose = ''
+    doc_usage = ''
+    doc_description = None  # None value will completely omit line from doc
+
+    # sequence of dicts
+    cmd_options = tuple()
+
+    # `execute_tasks` indicates whether this command execute task's actions.
+    # This is used by the loader to indicate when delayed task creation
+    # should be used.
+    execute_tasks = False
+
+    def __init__(self, config=None, bin_name='doit', opt_vals=None, **kwargs):
+        """configure command
+
+        :param bin_name: str - name of command line program
+        :param config: dict
+
+        Set extra configuration values, this vals can come from:
+         * directly passed when using the API - through DoitMain.run()
+         * from an INI configuration file
+        """
+        self.bin_name = bin_name
+        self.name = self.get_name()
+        # config includes all option values and plugins
+        self.config = config if config else {}
+        self._cmdparser = None
+        # option values (i.e. loader options)
+        self.opt_vals = opt_vals if opt_vals else {}
+
+        # config_vals contains cmd option values
+        self.config_vals = {}
+        if 'GLOBAL' in self.config:
+            self.config_vals.update(self.config['GLOBAL'])
+        if self.name in self.config:
+            self.config_vals.update(self.config[self.name])
+
+        # Use post-mortem PDB in case of error loading tasks.
+        # Only available for `run` command.
+        self.pdb = False
+
+
+    @classmethod
+    def get_name(cls):
+        """get command name as used from command line"""
+        return cls.name or cls.__name__.lower()
+
+    @property
+    def cmdparser(self):
+        """get CmdParser instance for this command
+
+        initialize option values:
+          - Default are taken from harded option definition
+          - Defaults are overwritten from user's cfg (INI) file
+        """
+        if not self._cmdparser:
+            self._cmdparser = CmdParse(self.get_options())
+            self._cmdparser.overwrite_defaults(self.config_vals)
+        return self._cmdparser
+
+
+    def get_options(self):
+        """@reutrn list of CmdOption
+        """
+        return [CmdOption(opt) for opt in self.cmd_options]
+
+
+    def execute(self, opt_values, pos_args):  # pragma: no cover
+        """execute command
+        :param opt_values: (dict) with cmd_options values
+        :param pos_args: (list) of cmd-line positional arguments
+        """
+        raise NotImplementedError()
+
+
+    def parse_execute(self, in_args):
+        """helper. just parse parameters and execute command
+
+        @args: see method parse
+        @returns: result of self.execute
+        """
+        params, args = self.cmdparser.parse(in_args)
+        self.pdb = params.get('pdb', False)
+        params.update(self.opt_vals)
+        return self.execute(params, args)
+
+    def help(self):
+        """return help text"""
+        text = []
+        text.append("PURPOSE")
+        text.extend(_wrap(self.doc_purpose, 4))
+
+        text.append("\nUSAGE")
+        usage = "{} {} {}".format(self.bin_name, self.name, self.doc_usage)
+        text.extend(_wrap(usage, 4))
+
+        text.append("\nOPTIONS")
+        options = defaultdict(list)
+        for opt in self.cmdparser.options:
+            options[opt.section].append(opt)
+        for section, opts in sorted(options.items()):
+            section_name = '\n{}'.format(section or self.name)
+            text.extend(_wrap(section_name, 4))
+            for opt in opts:
+                # ignore option that cant be modified on cmd line
+                if not (opt.short or opt.long):
+                    continue
+                text.extend(_wrap(opt.help_param(), 6))
+                # TODO It should always display option's default value
+                opt_help = opt.help % {'default': opt.default}
+                opt_choices = opt.help_choices()
+                opt_config = 'config: {}'.format(opt.name)
+                if opt.env_var:
+                    opt_env = ', environ: {}'.format(opt.env_var)
+                else:
+                    opt_env = ''
+                desc = '{} {} ({}{})'.format(opt_help, opt_choices,
+                                             opt_config, opt_env)
+                text.extend(_wrap(desc, 12))
+
+                # print bool inverse option
+                if opt.inverse:
+                    text.extend(_wrap('--{}'.format(opt.inverse), 6))
+                    text.extend(_wrap('opposite of --{}'.format(opt.long), 12))
+
+        if self.doc_description is not None:
+            text.append("\n\nDESCRIPTION")
+            text.extend(_wrap(self.doc_description, 4))
+        return "\n".join(text)
+
 ```
 
 **Example 7b**:
@@ -326,24 +824,43 @@ def open_instance_resource(self, resource: str, mode: str = "rb") -> t.IO[t.AnyS
 
 ## 9. Lambda
 
-**Example 9a**:
+**Example 9a**: 
   
  **Link**: 
 
-**Comments**: 
+**Comments**: flask/tests/test_json.py
 
 ```python
-# Python code for example 9a goes here
+def test_jsonify_uuid_types(app, client):
+    """Test jsonify with uuid.UUID types"""
+
+    test_uuid = uuid.UUID(bytes=b"\xDE\xAD\xBE\xEF" * 4)
+    url = "/uuid_test"
+    app.add_url_rule(url, url, lambda: flask.jsonify(x=test_uuid))
+
+    rv = client.get(url)
+
+    rv_x = flask.json.loads(rv.data)["x"]
+    assert rv_x == str(test_uuid)
+    rv_uuid = uuid.UUID(rv_x)
+    assert rv_uuid == test_uuid
 ```
 
 **Example 9b**:
   
- **Link**: 
+ **Link**: doit/action.py
 
 **Comments**: 
 
 ```python
-# Python code for example 9b goes here
+        # use task meta information as extra_args
+        meta_args = {
+            'task': lambda: task,
+            'targets': lambda: list(task.targets),
+            'dependencies': lambda: list(task.file_dep),
+            'changed': lambda: list(task.dep_changed),
+        }
+
 ```
 
 ---
