@@ -127,7 +127,7 @@ def task_create_file():
   
  **Link**: doit/control.py
 
-**Comments**: 
+**Comments**: 'step' method is designed to retrieve the next item from a generator (presumably an attribute of the class).
 
 ```python
     def step(self):
