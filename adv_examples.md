@@ -941,23 +941,85 @@ def test_jsonify_uuid_types(app, client):
 
 **Example 13a**:
   
- **Link**: 
+ **Link**: langchain/ingest.py
 
 **Comments**: 
 
 ```python
-# Python code for example 13a goes here
+
+def simple_extractor(html: str) -> str:
+    soup = BeautifulSoup(html, "lxml")
+    return re.sub(r"\n\n+", "\n\n", soup.text).strip()
 ```
 
 **Example 13b**:
   
- **Link**: 
+ **Link**: scrapy/commands/startproject.py
 
 **Comments**: 
 
 ```python
-# Python code for example 13b goes here
+        if not re.search(r"^[_a-zA-Z]\w*$", project_name):
+            print(
+                "Error: Project names must begin with a letter and contain"
+                " only\nletters, numbers and underscores"
+            )
 ```
 
+
+**Example 13b**:
+  
+ **Link**: scrapy/docs/utils/linkfix.py
+
+**Comments**: 
+
+```python
+def main():
+    # Used for remembering the file (and its contents)
+    # so we don't have to open the same file again.
+    _filename = None
+    _contents = None
+
+    # A regex that matches standard linkcheck output lines
+    line_re = re.compile(r"(.*)\:\d+\:\s\[(.*)\]\s(?:(.*)\sto\s(.*)|(.*))")
+
+    # Read lines from the linkcheck output file
+    try:
+        with Path("build/linkcheck/output.txt").open(encoding="utf-8") as out:
+            output_lines = out.readlines()
+    except OSError:
+        print("linkcheck output not found; please run linkcheck first.")
+        sys.exit(1)
+
+    # For every line, fix the respective file
+    for line in output_lines:
+        match = re.match(line_re, line)
+
+        if match:
+            newfilename = match.group(1)
+            errortype = match.group(2)
+
+            # Broken links can't be fixed and
+            # I am not sure what do with the local ones.
+            if errortype.lower() in ["broken", "local"]:
+                print("Not Fixed: " + line)
+            else:
+                # If this is a new file
+                if newfilename != _filename:
+                    # Update the previous file
+                    if _filename:
+                        Path(_filename).write_text(_contents, encoding="utf-8")
+
+                    _filename = newfilename
+
+                    # Read the new file to memory
+                    _contents = Path(_filename).read_text(encoding="utf-8")
+
+                _contents = _contents.replace(match.group(3), match.group(4))
+        else:
+            # We don't understand what the current line means!
+            print("Not Understood: " + line)
+
+```
 ---
 
