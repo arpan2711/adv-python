@@ -15,15 +15,20 @@
 
 ## Github projects 
 
-Using production code from the following projects to find examples-
+Using production code from the following projects for examples-
 
 **flask -**  The Python micro framework for building web applications.
 flask.palletsprojects.com 
 https://github.com/pallets/flask
 \
-\
 **pydoit -** Task management & automation tool 
 https://github.com/pydoit/doit
+\
+**langchain -** A LangChain app that is an implementation of a locally hosted chatbot specifically focused on question answering over the LangChain documentation. Built with LangChain, FastAPI, and Next.js.
+https://github.com/langchain-ai/chat-langchain
+\
+**scrapy -** Scrapy, a fast high-level web crawling & scraping framework for Python.  
+https://github.com/scrapy/scrapy
 
 ## 1. Decorators
 **Example 1a**:
@@ -223,7 +228,7 @@ def test_get_version(test_apps, capsys):
 
 ```
 
-**Example 4b**: class methods and static methods
+**Example 4b**: class methods 
   
  **Link**: doit/cmd_completion.py
 
@@ -231,17 +236,7 @@ def test_get_version(test_apps, capsys):
 
 ```python
 class TabCompletion(DoitCmdBase):
-    """generate scripts for tab-completion
 
-    If hardcode-tasks options is chosen it will get the task
-    list from the current dodo file and include in the completion script.
-    Otherwise the script will dynamically call `doit list` to get the list
-    of tasks.
-
-    If it is completing a sub-task (contains ':' in the name),
-    it will always call doit while evaluating the options.
-
-    """
     doc_purpose = "generate script for tab-completion"
     doc_usage = ""
     doc_description = None
@@ -279,146 +274,6 @@ class TabCompletion(DoitCmdBase):
         return bash_subcmd_arg.format(cmd_name=cmd.name, completion=completion)
 
 
-    def _generate_bash(self, opt_values, pos_args):
-        # some applications built with doit do not use dodo.py files
-        for opt in self.get_options():
-            if opt.name == 'dodoFile':
-                get_dodo_part = bash_get_dodo
-                pt_list_param = '--file="$dodof"'
-                break
-        else:
-            get_dodo_part = ''
-            pt_list_param = ''
-
-        # dict with template values
-        pt_bin_name = os.path.split(sys.argv[0])[1]
-        tmpl_vars = {
-            'pt_bin_name': pt_bin_name,
-            'pt_cmds': ' '.join(sorted(self.cmds)),
-            'pt_list_param': pt_list_param,
-        }
-
-        # if hardcode tasks
-        if opt_values['hardcode_tasks']:
-            if getattr(self.loader, 'API', 1) == 2:
-                self.loader.setup(opt_values)
-                self.loader.load_doit_config()
-                self.task_list = self.loader.load_tasks(cmd=self, pos_args=pos_args)
-            else:
-                self.task_list, _ = self.loader.load_tasks(
-                    self, opt_values, pos_args)
-            task_names = (t.name for t in self.task_list if not t.subtask_of)
-            tmpl_vars['pt_tasks'] = '"{0}"'.format(' '.join(sorted(task_names)))
-        else:
-            tmpl_list_cmd = "$({0} list {1} --quiet 2>/dev/null)"
-            tmpl_vars['pt_tasks'] = tmpl_list_cmd.format(pt_bin_name,
-                                                         pt_list_param)
-
-        # case statement to complete sub-commands
-        cmds_args = []
-        for name in sorted(self.cmds):
-            cmd_class = self.cmds[name]
-            cmd = cmd_class(**self.init_kwargs)
-            cmds_args.append(self._bash_cmd_args(cmd))
-        comp_subcmds = ("\n    case ${words[1]} in\n"
-                        + "".join(cmds_args)
-                        + "\n    esac\n")
-
-        template = Template(
-            bash_start + bash_opt_file + get_dodo_part
-            + bash_task_list + bash_first_arg
-            + comp_subcmds + bash_end)
-        self.outstream.write(template.safe_substitute(tmpl_vars))
-
-
-    @staticmethod
-    def _zsh_arg_line(opt):
-        """create a text line for completion of a command arg"""
-        # '(-c|--continue)'{-c,--continue}'[continue executing tasks...]' \
-        # '--db-file[file used to save successful runs]' \
-        if opt.short and opt.long:
-            tmpl = ('"(-{0.short}|--{0.long})"{{-{0.short},--{0.long}}}"'
-                    '[{help}]" \\')
-        elif not opt.short and opt.long:
-            tmpl = '"--{0.long}[{help}]" \\'
-        elif opt.short and not opt.long:
-            tmpl = '"-{0.short}[{help}]" \\'
-        else:  # without short or long options cant be really used
-            return ''
-        ohelp = opt.help.replace(']', r'\]').replace('"', r'\"')
-        return tmpl.format(opt, help=ohelp).replace('\n', ' ')
-
-
-    @classmethod
-    def _zsh_arg_list(cls, cmd):
-        """return list of arguments lines for zsh completion"""
-        args = []
-        for opt in cmd.get_options():
-            args.append(cls._zsh_arg_line(opt))
-        if 'TASK' in cmd.doc_usage:
-            args.append("'*::task:(($tasks))'")
-        if 'COMMAND' in cmd.doc_usage:
-            args.append("'::cmd:(($commands))'")
-        return args
-
-    @classmethod
-    def _zsh_cmd_args(cls, cmd):
-        """create the content for "case" statement with all command options """
-        arg_lines = cls._zsh_arg_list(cmd)
-        tmpl = """
-      ({cmd_name})
-          _command_args=(
-            {args_body}
-            ''
-        )
-      ;;
-"""
-        args_body = '\n            '.join(arg_lines)
-        return tmpl.format(cmd_name=cmd.name, args_body=args_body)
-
-
-    # TODO:
-    # detect correct dodo-file location
-    # complete sub-tasks
-    # task options
-    def _generate_zsh(self, opt_values, pos_args):
-        # deal with doit commands
-        cmds_desc = []
-        cmds_args = []
-        for name in sorted(self.cmds):
-            cmd_class = self.cmds[name]
-            cmd = cmd_class(**self.init_kwargs)
-            cmds_desc.append("    '{0}: {1}'".format(cmd.name, cmd.doc_purpose))
-            cmds_args.append(self._zsh_cmd_args(cmd))
-
-        template_vars = {
-            'pt_bin_name': sys.argv[0].split('/')[-1],
-            'pt_cmds': '\n    '.join(cmds_desc),
-            'pt_cmds_args': '\n'.join(cmds_args),
-        }
-
-        if opt_values['hardcode_tasks']:
-            if getattr(self.loader, 'API', 1) == 2:
-                self.loader.setup(opt_values)
-                self.loader.load_doit_config()
-                self.task_list = self.loader.load_tasks(cmd=self, pos_args=pos_args)
-            else:
-                self.task_list, _ = self.loader.load_tasks(
-                    self, opt_values, pos_args)
-            lines = []
-            for task in self.task_list:
-                if not task.subtask_of:
-                    lines.append("'{0}: {1}'".format(task.name, task.doc))
-            template_vars['pt_tasks'] = '(\n{0}\n)'.format(
-                '\n'.join(sorted(lines)))
-        else:
-            tmp_tasks = Template(
-                '''("${(f)$($pt_bin_name list --template '{name}: {doc}')}")''')
-            template_vars['pt_tasks'] = tmp_tasks.safe_substitute(template_vars)
-
-
-        template = Template(zsh_start)
-        self.outstream.write(template.safe_substitute(template_vars))
 
 ```
 
@@ -463,57 +318,6 @@ def test_find_best_app(test_apps):
     assert isinstance(app, Flask)
     assert app.name == "appname"
 
-    class Module:
-        @staticmethod
-        def make_app():
-            return Flask("appname")
-
-    app = find_best_app(Module)
-    assert isinstance(app, Flask)
-    assert app.name == "appname"
-
-    class Module:
-        myapp = Flask("appname1")
-
-        @staticmethod
-        def create_app():
-            return Flask("appname2")
-
-    assert find_best_app(Module) == Module.myapp
-
-    class Module:
-        myapp = Flask("appname1")
-
-        @staticmethod
-        def create_app():
-            return Flask("appname2")
-
-    assert find_best_app(Module) == Module.myapp
-
-    class Module:
-        pass
-
-    pytest.raises(NoAppException, find_best_app, Module)
-
-    class Module:
-        myapp1 = Flask("appname1")
-        myapp2 = Flask("appname2")
-
-    pytest.raises(NoAppException, find_best_app, Module)
-
-    class Module:
-        @staticmethod
-        def create_app(foo, bar):
-            return Flask("appname2")
-
-    pytest.raises(NoAppException, find_best_app, Module)
-
-    class Module:
-        @staticmethod
-        def create_app():
-            raise TypeError("bad bad factory!")
-
-    pytest.raises(TypeError, find_best_app, Module)
 ```
 
 ---
@@ -522,7 +326,7 @@ def test_find_best_app(test_apps):
 
 **Example 5a**:
   
- **Link**: 
+ **Link**: doit/cmd_base.py
 
 **Comments**: \
 The class DoitCmdBase inherits from Command as indicated by the syntax class DoitCmdBase(Command). 
@@ -551,7 +355,7 @@ class DoitCmdBase(Command):
 
 **Example 5b**:
   
- **Link**: 
+ **Link**: doit/doc/samples/custom_loader.py
 
 **Comments**: 
 
@@ -588,7 +392,7 @@ class MyLoader(TaskLoader2): # CLASS INHERITANCE
 
 **Example 6a**:
   
- **Link**: 
+ **Link**: doit/doc/samples/custom_loader.py
 
 **Comments**: 
 Subclasses of DoitCmdBase can provide specific implementations of the _execute method as mentioned in the docstring, showcasing polymorphism where the exact behavior of _execute can vary based on the subclass, while the calling code can interact with instances of DoitCmdBase and its subclasses in a uniform manner.
@@ -689,12 +493,35 @@ class Command(object):
 
 **Example 8a**:
   
- **Link**: 
+ **Link**: langchain/_scripts/evaluate_chains.py
 
-**Comments**: 
+**Comments**: The leading underscore in _get_llm_runs denotes that this method is intended to be private, meaning it's designed to be called only within the context of the CustomHallucinationEvaluator class or its subclasses.
 
 ```python
-# Python code for example 8a goes here
+class CustomHallucinationEvaluator(RunEvaluator):
+    @staticmethod
+    def _get_llm_runs(run: Run) -> Run:
+        runs = []
+        for child in run.child_runs or []:
+            if run.run_type == "llm":
+                runs.append(child)
+            else:
+                runs.extend(CustomHallucinationEvaluator._get_llm_runs(child))
+
+    def evaluate_run(
+        self, run: Run, example: Example | None = None
+    ) -> EvaluationResult:
+        llm_runs = self._get_llm_runs(run)
+        if not llm_runs:
+            return EvaluationResult(key="hallucination", comment="No LLM runs found")
+        if len(llm_runs) > 0:
+            return EvaluationResult(
+                key="hallucination", comment="Too many LLM runs found"
+            )
+        llm_run = llm_runs[0]
+        messages = llm_run.inputs["messages"]
+        langchain_load(json.dumps(messages))
+
 ```
 
 **Example 8b**:
@@ -713,9 +540,9 @@ class Command(object):
 
 **Example 9a**: 
   
- **Link**: 
+ **Link**: flask/tests/test_json.py
 
-**Comments**: flask/tests/test_json.py
+**Comments**: 
 
 ```python
 def test_jsonify_uuid_types(app, client):
@@ -756,12 +583,32 @@ def test_jsonify_uuid_types(app, client):
 
 **Example 10a**:
   
- **Link**: 
+ **Link**: scrapy/utils/misc.py
 
-**Comments**: 
+**Comments**: Through recursion, this function is able to load a module and all of its submodules, regardless of how deeply nested the submodule structure is. It does this by making recursive calls to walk_modules for each submodule that is also a package, accumulating the list of modules in the mods list, which is returned at the end.
 
 ```python
-# Python code for example 10a goes here
+def walk_modules(path: str) -> List[ModuleType]:
+    """Loads a module and all its submodules from the given module path and
+    returns them. If *any* module throws an exception while importing, that
+    exception is thrown back.
+
+    For example: walk_modules('scrapy.utils')
+    """
+
+    mods: List[ModuleType] = []
+    mod = import_module(path)
+    mods.append(mod)
+    if hasattr(mod, "__path__"):
+        for _, subpath, ispkg in iter_modules(mod.__path__):
+            fullpath = path + "." + subpath
+            if ispkg:
+                mods += walk_modules(fullpath)
+            else:
+                submod = import_module(fullpath)
+                mods.append(submod)
+    return mods
+
 ```
 
 **Example 10b**:
@@ -827,7 +674,7 @@ language = next(
 
 **Example 12c**: Zip
   
- **Link**: 
+ **Link**: langchain/parser.py
 
 **Comments**: zip(tabs, tab_panels) combines the iterables tabs and tab_panels element-wise into tuples. Each tuple contains one element from tabs and one element from tab_panels, paired up based on their position.
 
