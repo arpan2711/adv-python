@@ -719,7 +719,7 @@ language = next(
 ---
 ### *Example 12c*: Zip
   
- **Link**: langchain/parser.py (Lines: 76-79)
+ **Link**: https://github.com/langchain-ai/chat-langchain/blob/master/parser.py (Lines: 76-79)
 
 **Comments**: 
 
