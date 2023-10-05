@@ -130,9 +130,13 @@ def task_compile():
 
 **Example 2b**:
   
- **Link**: doit/samples/subtasks.py
+**Link**: https://github.com/pydoit/doit/blob/master/doc/samples/subtasks.py
 
-**Lines**: **Comments**: When you call this function, it will not execute the loop immediately. Instead, it will return a generator object. As you iterate over this generator (e.g., using a for loop or the next function), it will execute the loop and yield tasks one by one.
+**Lines**: 1-5
+
+**Comments**: 
+
+When you call this function, it will not execute the loop immediately. Instead, it will return a generator object. As you iterate over this generator (e.g., using a for loop or the next function), it will execute the loop and yield tasks one by one.
 
 ```python
 def task_create_file():
@@ -144,17 +148,21 @@ def task_create_file():
 
 **Example 2c**:
   
- **Link**: doit/control.py
+**Link**: https://github.com/pydoit/doit/blob/master/doit/control.py
 
-**Lines**: **Comments**: 'step' method is designed to retrieve the next item from a generator (presumably an attribute of the class).
+**Lines**: 333-338
+
+**Comments**: 
+
+'step' method is designed to retrieve the next item from a generator (presumably an attribute of the class).
 
 ```python
-    def step(self):
-        """get node's next step"""
-        try:
-            return next(self.generator)
-        except StopIteration:
-            return None
+def step(self):
+    """get node's next step"""
+    try:
+        return next(self.generator)
+    except StopIteration:
+        return None
 ```
 
 ---
@@ -163,9 +171,13 @@ def task_create_file():
 
 **Example 3a**: Examples on this file from flask repo
   
- **Link**: https://github.com/pallets/flask/blob/main/src/flask/app.py
+**Link**: https://github.com/pallets/flask/blob/main/src/flask/app.py
 
-**Lines**: **Comments**: The function signature includes a type hint indicating that the function returns a dictionary (dict).
+**Lines**: 484-494
+
+**Comments**: 
+
+The function signature includes a type hint indicating that the function returns a dictionary (dict).
 
 ```python
 def make_shell_context(self) -> dict:
@@ -180,7 +192,10 @@ def make_shell_context(self) -> dict:
         rv.update(processor())
     return rv
 ```
-**Lines**: **Comments**: 
+**Lines**: 336-346
+
+**Comments**: 
+
 - **self**: 
   This is a reference to the instance of the class to which this method belongs.
   It doesn't have a type hint because it's a convention in Python for instance methods.
@@ -218,9 +233,13 @@ def open_instance_resource(self, resource: str, mode: str = "rb") -> t.IO[t.AnyS
 
 **Example 4a**: class attributes
   
- **Link**: flask/tests/test_cli.py
+**Link**: https://github.com/pallets/flask/blob/master/tests/test_cli.py
 
-**Lines**: **Comments**: A nested class MockCtx is defined within the test_get_version function. This class has two class attributes: resilient_parsing and color. 
+**Lines**: 231-244
+
+**Comments**: 
+
+A nested class MockCtx is defined within the test_get_version function. This class has two class attributes: resilient_parsing and color. 
 
 ```python
 def test_get_version(test_apps, capsys):
@@ -242,9 +261,11 @@ def test_get_version(test_apps, capsys):
 
 **Example 4b**: class methods 
   
- **Link**: doit/cmd_completion.py
+**Link**: https://github.com/pydoit/doit/blob/master/doit/cmd_completion.py
 
-**Lines**: **Comments**: 
+**Lines**: 31-77
+
+**Comments**: 
 
 ```python
 class TabCompletion(DoitCmdBase):
@@ -291,9 +312,11 @@ class TabCompletion(DoitCmdBase):
 
 **Example 4c**: static method
   
- **Link**: flask/tests/test_cli.py
+**Link**: https://github.com/pallets/flask/blob/master/tests/test_cli.py
 
-**Lines**: **Comments**: 
+**Lines**: 48-80
+
+**Comments**: 
 
 ```python
 def test_find_best_app(test_apps):
@@ -338,9 +361,12 @@ def test_find_best_app(test_apps):
 
 **Example 5a**:
   
- **Link**: doit/cmd_base.py
+**Link**: https://github.com/pydoit/doit/blob/master/doit/cmd_base.py
 
-**Lines**: **Comments**: \
+**Lines**: 432-448
+
+**Comments**: 
+
 The class DoitCmdBase inherits from Command as indicated by the syntax class DoitCmdBase(Command). 
 
 
@@ -367,9 +393,11 @@ class DoitCmdBase(Command):
 
 **Example 5b**:
   
- **Link**: doit/doc/samples/custom_loader.py
+**Link**: https://github.com/pydoit/doit/blob/master/doc/samples/custom_loader.py
 
-**Lines**: **Comments**: 
+**Lines**: 3-25
+
+**Comments**: 
 
 ```python
 import sys
@@ -404,9 +432,12 @@ class MyLoader(TaskLoader2): # CLASS INHERITANCE
 
 **Example 6a**:
   
- **Link**: doit/doc/samples/custom_loader.py
+**Link**: https://github.com/pydoit/doit/blob/master/doc/samples/custom_loader.py
 
-**Lines**: **Comments**: 
+**Lines**: 432-448
+
+**Comments**: 
+
 Subclasses of DoitCmdBase can provide specific implementations of the _execute method as mentioned in the docstring, showcasing polymorphism where the exact behavior of _execute can vary based on the subclass, while the calling code can interact with instances of DoitCmdBase and its subclasses in a uniform manner.
 
 ```python
@@ -432,9 +463,11 @@ class DoitCmdBase(Command):
 
 **Example 6b**:
   
- **Link**: 
+**Link**: 
 
-**Lines**: **Comments**: 
+**Lines**: 
+
+**Comments**: 
 
 ```python
 # Python code for example 6b goes here
@@ -446,9 +479,12 @@ class DoitCmdBase(Command):
 
 **Example 7a**:
   
- **Link**: doit/cmd_base.py
+**Link**: https://github.com/pydoit/doit/blob/master/doit/cmd_base.py
 
-**Lines**: **Comments**:     
+**Lines**: 51-130
+
+**Comments**:   
+
 The @property decorator is used to define a method as a "getter" for a property named cmdparser. The method cmdparser is defined to lazily initialize and return a CmdParser instance, which is stored in the private attribute _cmdparser.
 Accessing cmdparser as an attribute (self.cmdparser) will invoke the method cmdparser(self) and return the _cmdparser instance. This encapsulates the logic for creating and caching the CmdParser instance behind a simple attribute access, making it easier and cleaner to use.
 
@@ -505,9 +541,13 @@ class Command(object):
 
 **Example 8a**:
   
- **Link**: langchain/_scripts/evaluate_chains.py
+**Link**: https://github.com/langchain-ai/chat-langchain/blob/master/_scripts/evaluate_chains.py
 
-**Lines**: **Comments**: The leading underscore in _get_llm_runs denotes that this method is intended to be private, meaning it's designed to be called only within the context of the CustomHallucinationEvaluator class or its subclasses.
+**Lines**: 129-151
+
+**Comments**: 
+
+The leading underscore in _get_llm_runs denotes that this method is intended to be private, meaning it's designed to be called only within the context of the CustomHallucinationEvaluator class or its subclasses.
 
 ```python
 class CustomHallucinationEvaluator(RunEvaluator):
@@ -538,9 +578,11 @@ class CustomHallucinationEvaluator(RunEvaluator):
 
 **Example 8b**:
   
- **Link**: 
+**Link**: 
 
-**Lines**: **Comments**: 
+**Lines**: 
+
+**Comments**: 
 
 ```python
 # Python code for example 8b goes here
@@ -552,9 +594,11 @@ class CustomHallucinationEvaluator(RunEvaluator):
 
 **Example 9a**: 
   
- **Link**: flask/tests/test_json.py
+**Link**: https://github.com/pallets/flask/blob/master/tests/test_json.py
 
-**Lines**: **Comments**: 
+**Lines**: 176-188
+
+**Comments**: 
 
 ```python
 def test_jsonify_uuid_types(app, client):
@@ -574,18 +618,20 @@ def test_jsonify_uuid_types(app, client):
 
 **Example 9b**:
   
- **Link**: doit/action.py
+**Link**: https://github.com/pydoit/doit/blob/master/doit/action.py
 
-**Lines**: **Comments**: 
+**Lines**: 53-58
+
+**Comments**: 
 
 ```python
-        # use task meta information as extra_args
-        meta_args = {
-            'task': lambda: task,
-            'targets': lambda: list(task.targets),
-            'dependencies': lambda: list(task.file_dep),
-            'changed': lambda: list(task.dep_changed),
-        }
+# use task meta information as extra_args
+meta_args = {
+    'task': lambda: task,
+    'targets': lambda: list(task.targets),
+    'dependencies': lambda: list(task.file_dep),
+    'changed': lambda: list(task.dep_changed),
+}
 
 ```
 
@@ -595,9 +641,13 @@ def test_jsonify_uuid_types(app, client):
 
 **Example 10a**:
   
- **Link**: scrapy/utils/misc.py
+**Link**: https://github.com/scrapy/scrapy/blob/master/scrapy/utils/misc.py
 
-**Lines**: **Comments**: Through recursion, this function is able to load a module and all of its submodules, regardless of how deeply nested the submodule structure is. It does this by making recursive calls to walk_modules for each submodule that is also a package, accumulating the list of modules in the mods list, which is returned at the end.
+**Lines**: 89-108
+
+**Comments**: 
+
+Through recursion, this function is able to load a module and all of its submodules, regardless of how deeply nested the submodule structure is. It does this by making recursive calls to walk_modules for each submodule that is also a package, accumulating the list of modules in the mods list, which is returned at the end.
 
 ```python
 def walk_modules(path: str) -> List[ModuleType]:
@@ -625,9 +675,11 @@ def walk_modules(path: str) -> List[ModuleType]:
 
 **Example 10b**:
   
- **Link**: 
+**Link**: 
 
-**Lines**: **Comments**: 
+**Lines**: 
+
+**Comments**: 
 
 ```python
 # Python code for example 10b goes here
@@ -639,9 +691,13 @@ def walk_modules(path: str) -> List[ModuleType]:
 
 **Example 11a**:
   
- **Link**: flask/examples/tutorial/tests/conftest.py
+**Link**: https://github.com/pallets/flask/blob/master/examples/tutorial/tests/conftest.py
 
-**Lines**: **Comments**: By using a context manager, the file is automatically closed when exiting the with block, even if an exception occurs within the block.
+**Lines**: 11-12
+
+**Comments**: 
+
+By using a context manager, the file is automatically closed when exiting the with block, even if an exception occurs within the block.
 
 ```python
 # read in SQL for populating test data
@@ -656,9 +712,13 @@ with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
 
 **Example 12a**: Map
   
- **Link**: scrapy/docs/conf.py
+**Link**: https://github.com/scrapy/scrapy/blob/master/docs/conf.py 
 
-**Lines**: **Comments**: The map function is a handy way to apply a function (in this case, str for string conversion) to each element of a collection (in this case, a tuple of version numbers).
+**Lines**: 58-65
+
+**Comments**: 
+
+The map function is a handy way to apply a function (in this case, str for string conversion) to each element of a collection (in this case, a tuple of version numbers).
 
 ```python
 try:
@@ -673,9 +733,13 @@ except ImportError:
 
 **Example 12b**: Filter
   
- **Link**: langchain/parser.py
+**Link**: https://github.com/langchain-ai/chat-langchain/blob/master/parser.py
 
-**Lines**: **Comments**: filter returns an iterator that yields only the items from classes for which the lambda function returns True. In other words, it filters classes to include only the items that match the regular expression pattern r"language-\w+".
+**Lines**: 37-40
+
+**Comments**: 
+
+filter returns an iterator that yields only the items from classes for which the lambda function returns True. In other words, it filters classes to include only the items that match the regular expression pattern r"language-\w+".
 
 ```python
 language = next(
@@ -688,7 +752,11 @@ language = next(
   
  **Link**: langchain/parser.py
 
-**Lines**: **Comments**: zip(tabs, tab_panels) combines the iterables tabs and tab_panels element-wise into tuples. Each tuple contains one element from tabs and one element from tab_panels, paired up based on their position.
+**Lines**: 76-79
+
+**Comments**: 
+
+zip(tabs, tab_panels) combines the iterables tabs and tab_panels element-wise into tuples. Each tuple contains one element from tabs and one element from tab_panels, paired up based on their position.
 
 ```python
 for tab, tab_panel in zip(tabs, tab_panels):
@@ -702,9 +770,13 @@ for tab, tab_panel in zip(tabs, tab_panels):
 
 **Example 13a**:
   
- **Link**: langchain/ingest.py
+ **Link**: https://github.com/langchain-ai/chat-langchain/blob/master/ingest.py
 
-**Lines**: **Comments**: This expression uses the re.sub function from the re module to clean up the extracted text. Specifically, it is replacing occurrences of two or more consecutive newline characters (\n\n+) with exactly two newline characters (\n\n).
+**Lines**: 53-55
+
+**Comments**: 
+
+This expression uses the re.sub function from the re module to clean up the extracted text. Specifically, it is replacing occurrences of two or more consecutive newline characters (\n\n+) with exactly two newline characters (\n\n).
 
 ```python
 def simple_extractor(html: str) -> str:
