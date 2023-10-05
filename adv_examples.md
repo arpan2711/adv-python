@@ -17,10 +17,22 @@
 
 Using production code from the following projects-
 
-- **flask** - The Python micro framework for building web applications. [Official Site](https://flask.palletsprojects.com) | [GitHub](https://github.com/pallets/flask)
-- **pydoit** - Task management & automation tool. [GitHub](https://github.com/pydoit/doit)
-- **langchain** - A LangChain app that is an implementation of a locally hosted chatbot specifically focused on question answering over the LangChain documentation. Built with LangChain, FastAPI, and Next.js. [GitHub](https://github.com/langchain-ai/chat-langchain)
-- **scrapy** - Scrapy, a fast high-level web crawling & scraping framework for Python. [GitHub](https://github.com/scrapy/scrapy)
+- **Flask**: Flask is a lightweight and powerful micro web framework for Python. It is designed to make getting started quick and easy, with the ability to scale up to complex applications. It has a built-in development server and debugger, integrated unit testing support, and is fully Unicode-enabled with RESTful request dispatching and WSGI compliance.
+   - [Official Site](https://flask.palletsprojects.com)
+   - [GitHub](https://github.com/pallets/flask)
+
+- **pydoit**: pydoit is a task management and automation tool designed to be simple and easy to use. It allows you to define tasks and dependencies and then execute them in parallel. It's a flexible and versatile tool that can be used for build automation, continuous integration, and other scripting tasks.
+   - [Official Site](https://pydoit.org)
+   - [GitHub](https://github.com/pydoit/doit)
+
+- **LangChain App**: This is an application built to provide an interface for querying and interacting with the LangChain documentation. It is a locally-hosted chatbot focused on answering questions over the LangChain documentation, built using LangChain, FastAPI, and Next.js, ensuring a responsive and user-friendly experience.
+   - [Official Site](https://www.langchain.com)
+   - [GitHub](https://github.com/langchain-ai/chat-langchain)
+
+- **Scrapy**: Scrapy is an open-source and collaborative web crawling framework for Python. It's built to handle data extraction from websites, making it easy to build and scale large crawling projects. Scrapy also provides all the tools needed to extract data from websites, process them, and store them in your preferred format.
+   - [Official Site](https://scrapy.org)
+   - [GitHub](https://github.com/scrapy/scrapy)
+
 
 
 ## 1. Decorators
