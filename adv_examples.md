@@ -13,9 +13,9 @@
 12. [Map, Filter, and Zip Functions](#12-map-filter-and-zip-functions)
 13. [Regex](#13-regex)
 
-## Github projects 
+## Github Projects 
 
-Using production code from the following projects for examples-
+Using production code from the following projects-
 
 - **flask** - The Python micro framework for building web applications. [Official Site](https://flask.palletsprojects.com) | [GitHub](https://github.com/pallets/flask)
 - **pydoit** - Task management & automation tool. [GitHub](https://github.com/pydoit/doit)
@@ -157,7 +157,7 @@ def step(self):
 
 ## 3. Type Hinting
 
-### *Example 3a*: Examples on this file from flask repo
+### *Example 3a*: 
   
 **Link**: https://github.com/pallets/flask/blob/main/src/flask/app.py (Lines: 484-494)
 
