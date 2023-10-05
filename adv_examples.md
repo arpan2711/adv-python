@@ -24,6 +24,7 @@ Using production code from the following projects for examples-
 
 
 ## 1. Decorators
+
 ### *Example 1a*:
   
 **Link**: https://github.com/pydoit/doit/blob/master/doit/control.py
@@ -49,7 +50,7 @@ def no_none(decorated):
 
 
 ```
-
+---
 ### *Example 1b*:
   
 **Link**: https://github.com/pydoit/doit/blob/master/doc/samples/my_tasks.py
@@ -90,9 +91,9 @@ def pre(to_create):
         fp.write('foo')
 ```
 
----
 
 ## 2. Generators
+
 
 ### *Example 2a*:
   
@@ -123,7 +124,7 @@ def task_compile():
             'targets': [object_file],
         }
 ```
-
+---
 ### *Example 2b*:
   
 **Link**: https://github.com/pydoit/doit/blob/master/doc/samples/subtasks.py
@@ -142,7 +143,7 @@ def task_create_file():
         yield {'name': filename,
                'actions': ["touch %s" % filename]}
 ```
-
+---
 ### *Example 2c*:
   
 **Link**: https://github.com/pydoit/doit/blob/master/doit/control.py
@@ -163,7 +164,6 @@ def step(self):
         return None
 ```
 
----
 
 ## 3. Type Hinting
 
@@ -226,9 +226,9 @@ def open_instance_resource(self, resource: str, mode: str = "rb") -> t.IO[t.AnyS
 
 ```
 
----
 
 ## 4. Extension on class basics
+
 ### (Class Attributes, Class Methods, Static Methods)
 
 ### *Example 4a*: class attributes
@@ -259,7 +259,7 @@ def test_get_version(test_apps, capsys):
     assert f"Werkzeug {importlib.metadata.version('werkzeug')}" in out
 
 ```
-
+---
 ### *Example 4b*: class methods 
   
 **Link**: https://github.com/pydoit/doit/blob/master/doit/cmd_completion.py
@@ -311,7 +311,7 @@ class TabCompletion(DoitCmdBase):
 
 
 ```
-
+---
 ### *Example 4c*: static method
   
 **Link**: https://github.com/pallets/flask/blob/master/tests/test_cli.py
@@ -358,7 +358,6 @@ def test_find_best_app(test_apps):
 
 ```
 
----
 
 ## 5. Class Inheritance
 
@@ -394,7 +393,7 @@ class DoitCmdBase(Command):
         self._backends = self.get_backends()
 
 ```
-
+---
 ### *Example 5b*:
   
 **Link**: https://github.com/pydoit/doit/blob/master/doc/samples/custom_loader.py
@@ -431,7 +430,6 @@ class MyLoader(TaskLoader2): # CLASS INHERITANCE
 
 ```
 
----
 
 ## 6. Duck Typing
 
@@ -466,7 +464,7 @@ class DoitCmdBase(Command):
         self._backends = self.get_backends()
 
 ```
-
+---
 ### *Example 6b*:
   
 **Link**: 
@@ -480,7 +478,6 @@ class DoitCmdBase(Command):
 # Python code for example 6b goes here
 ```
 
----
 
 ## 7. Properties
 
@@ -543,7 +540,6 @@ class Command(object):
 
 ```
 
----
 
 ## 8. Private Attributes
 
@@ -584,7 +580,7 @@ class CustomHallucinationEvaluator(RunEvaluator):
         langchain_load(json.dumps(messages))
 
 ```
-
+---
 ### *Example 8b*:
   
 **Link**: 
@@ -598,7 +594,6 @@ class CustomHallucinationEvaluator(RunEvaluator):
 # Python code for example 8b goes here
 ```
 
----
 
 ## 9. Lambda
 
@@ -626,7 +621,7 @@ def test_jsonify_uuid_types(app, client):
     rv_uuid = uuid.UUID(rv_x)
     assert rv_uuid == test_uuid
 ```
-
+---
 ### *Example 9b*:
   
 **Link**: https://github.com/pydoit/doit/blob/master/doit/action.py
@@ -647,7 +642,6 @@ meta_args = {
 
 ```
 
----
 
 ## 10. Recursion
 
@@ -685,7 +679,7 @@ def walk_modules(path: str) -> List[ModuleType]:
     return mods
 
 ```
-
+---
 ### *Example 10b*:
   
 **Link**: 
@@ -699,7 +693,6 @@ def walk_modules(path: str) -> List[ModuleType]:
 # Python code for example 10b goes here
 ```
 
----
 
 ## 11. Context Managers
 
@@ -721,7 +714,6 @@ with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
 ```
 
 
----
 
 ## 12. Map, Filter, and Zip Functions
 
@@ -746,7 +738,7 @@ except ImportError:
     version = ""
     release = ""
 ```
-
+---
 ### *Example 12b*: Filter
   
 **Link**: https://github.com/langchain-ai/chat-langchain/blob/master/parser.py
@@ -764,7 +756,7 @@ language = next(
     None,
 )
 ```
-
+---
 ### *Example 12c*: Zip
   
  **Link**: langchain/parser.py
@@ -782,7 +774,6 @@ for tab, tab_panel in zip(tabs, tab_panels):
     yield f"{tab_name}\n"
     yield from get_text(tab_panel)
 ```
----
 
 ## 13. Regex
 
@@ -802,7 +793,7 @@ def simple_extractor(html: str) -> str:
     soup = BeautifulSoup(html, "lxml")
     return re.sub(r"\n\n+", "\n\n", soup.text).strip()
 ```
-
+---
 ### *Example 13b*:
   
  **Link**: https://github.com/scrapy/scrapy/blob/master/scrapy/commands/startproject.py
@@ -822,7 +813,7 @@ if not re.search(r"^[_a-zA-Z]\w*$", project_name):
     )
 ```
 
-
+---
 ### *Example 13c*:
   
  **Link**: https://github.com/scrapy/scrapy/blob/master/docs/utils/linkfix.py
