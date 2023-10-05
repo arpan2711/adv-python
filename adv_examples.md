@@ -27,9 +27,7 @@ Using production code from the following projects for examples-
 
 ### *Example 1a*:
   
-**Link**: https://github.com/pydoit/doit/blob/master/doit/control.py
-
-**Lines**: 341-348
+**Link**: https://github.com/pydoit/doit/blob/master/doit/control.py (Lines: 341-348)
 
 **Comments**: 
 
@@ -53,9 +51,7 @@ def no_none(decorated):
 ---
 ### *Example 1b*:
   
-**Link**: https://github.com/pydoit/doit/blob/master/doc/samples/my_tasks.py
-
-**Lines**: 1-23
+**Link**: https://github.com/pydoit/doit/blob/master/doc/samples/my_tasks.py (Lines: 1-23)
 
 **Comments**: 
 
@@ -97,9 +93,7 @@ def pre(to_create):
 
 ### *Example 2a*:
   
-**Link**: https://github.com/pydoit/doit/blob/master/doc/samples/compile_pathlib.py
-
-**Lines**: 1-13
+**Link**: https://github.com/pydoit/doit/blob/master/doc/samples/compile_pathlib.py (Lines: 1-13)
 
 **Comments**: 
 
@@ -127,9 +121,7 @@ def task_compile():
 ---
 ### *Example 2b*:
   
-**Link**: https://github.com/pydoit/doit/blob/master/doc/samples/subtasks.py
-
-**Lines**: 1-5
+**Link**: https://github.com/pydoit/doit/blob/master/doc/samples/subtasks.py (Lines: 1-5)
 
 **Comments**: 
 
@@ -146,9 +138,7 @@ def task_create_file():
 ---
 ### *Example 2c*:
   
-**Link**: https://github.com/pydoit/doit/blob/master/doit/control.py
-
-**Lines**: 333-338
+**Link**: https://github.com/pydoit/doit/blob/master/doit/control.py (Lines: 333-338)
 
 **Comments**: 
 
@@ -169,9 +159,7 @@ def step(self):
 
 ### *Example 3a*: Examples on this file from flask repo
   
-**Link**: https://github.com/pallets/flask/blob/main/src/flask/app.py
-
-**Lines**: 484-494
+**Link**: https://github.com/pallets/flask/blob/main/src/flask/app.py (Lines: 484-494)
 
 **Comments**: 
 
@@ -233,9 +221,7 @@ def open_instance_resource(self, resource: str, mode: str = "rb") -> t.IO[t.AnyS
 
 ### *Example 4a*: class attributes
   
-**Link**: https://github.com/pallets/flask/blob/master/tests/test_cli.py
-
-**Lines**: 231-244
+**Link**: https://github.com/pallets/flask/blob/master/tests/test_cli.py (Lines: 231-244)
 
 **Comments**: 
 
@@ -262,9 +248,7 @@ def test_get_version(test_apps, capsys):
 ---
 ### *Example 4b*: class methods 
   
-**Link**: https://github.com/pydoit/doit/blob/master/doit/cmd_completion.py
-
-**Lines**: 31-77
+**Link**: https://github.com/pydoit/doit/blob/master/doit/cmd_completion.py (Lines: 31-77)
 
 **Comments**: 
 
@@ -314,9 +298,7 @@ class TabCompletion(DoitCmdBase):
 ---
 ### *Example 4c*: static method
   
-**Link**: https://github.com/pallets/flask/blob/master/tests/test_cli.py
-
-**Lines**: 48-80
+**Link**: https://github.com/pallets/flask/blob/master/tests/test_cli.py (Lines: 48-80)
 
 **Comments**: 
 
@@ -363,9 +345,7 @@ def test_find_best_app(test_apps):
 
 ### *Example 5a*:
   
-**Link**: https://github.com/pydoit/doit/blob/master/doit/cmd_base.py
-
-**Lines**: 432-448
+**Link**: https://github.com/pydoit/doit/blob/master/doit/cmd_base.py (Lines: 432-448)
 
 **Comments**: 
 
@@ -396,9 +376,7 @@ class DoitCmdBase(Command):
 ---
 ### *Example 5b*:
   
-**Link**: https://github.com/pydoit/doit/blob/master/doc/samples/custom_loader.py
-
-**Lines**: 3-25
+**Link**: https://github.com/pydoit/doit/blob/master/doc/samples/custom_loader.py (Lines: 3-25)
 
 **Comments**: 
 
@@ -435,9 +413,7 @@ class MyLoader(TaskLoader2): # CLASS INHERITANCE
 
 ### *Example 6a*:
   
-**Link**: https://github.com/pydoit/doit/blob/master/doc/samples/custom_loader.py
-
-**Lines**: 432-448
+**Link**: https://github.com/pydoit/doit/blob/master/doc/samples/custom_loader.py (Lines: 432-448)
 
 **Comments**: 
 
@@ -483,9 +459,7 @@ class DoitCmdBase(Command):
 
 ### *Example 7a*:
   
-**Link**: https://github.com/pydoit/doit/blob/master/doit/cmd_base.py
-
-**Lines**: 51-130
+**Link**: https://github.com/pydoit/doit/blob/master/doit/cmd_base.py (Lines: 51-130)
 
 **Comments**:   
 
@@ -545,9 +519,7 @@ class Command(object):
 
 ### *Example 8a*:
   
-**Link**: https://github.com/langchain-ai/chat-langchain/blob/master/_scripts/evaluate_chains.py
-
-**Lines**: 129-151
+**Link**: https://github.com/langchain-ai/chat-langchain/blob/master/_scripts/evaluate_chains.py (Lines: 129-151)
 
 **Comments**: 
 
@@ -599,9 +571,7 @@ class CustomHallucinationEvaluator(RunEvaluator):
 
 ### *Example 9a*: 
   
-**Link**: https://github.com/pallets/flask/blob/master/tests/test_json.py
-
-**Lines**: 176-188
+**Link**: https://github.com/pallets/flask/blob/master/tests/test_json.py (Lines: 176-188)
 
 **Comments**: 
 
@@ -624,9 +594,7 @@ def test_jsonify_uuid_types(app, client):
 ---
 ### *Example 9b*:
   
-**Link**: https://github.com/pydoit/doit/blob/master/doit/action.py
-
-**Lines**: 53-58
+**Link**: https://github.com/pydoit/doit/blob/master/doit/action.py (Lines: 53-58)
 
 **Comments**: 
 
@@ -647,9 +615,7 @@ meta_args = {
 
 ### *Example 10a*:
   
-**Link**: https://github.com/scrapy/scrapy/blob/master/scrapy/utils/misc.py
-
-**Lines**: 89-108
+**Link**: https://github.com/scrapy/scrapy/blob/master/scrapy/utils/misc.py (Lines: 89-108)
 
 **Comments**: 
 
@@ -698,9 +664,7 @@ def walk_modules(path: str) -> List[ModuleType]:
 
 ### *Example 11a*:
   
-**Link**: https://github.com/pallets/flask/blob/master/examples/tutorial/tests/conftest.py
-
-**Lines**: 11-12
+**Link**: https://github.com/pallets/flask/blob/master/examples/tutorial/tests/conftest.py (Lines: 11-12)
 
 **Comments**: 
 
@@ -719,9 +683,7 @@ with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
 
 ### *Example 12a*: Map
   
-**Link**: https://github.com/scrapy/scrapy/blob/master/docs/conf.py 
-
-**Lines**: 58-65
+**Link**: https://github.com/scrapy/scrapy/blob/master/docs/conf.py  (Lines: 58-65)
 
 **Comments**: 
 
@@ -741,9 +703,7 @@ except ImportError:
 ---
 ### *Example 12b*: Filter
   
-**Link**: https://github.com/langchain-ai/chat-langchain/blob/master/parser.py
-
-**Lines**: 37-40
+**Link**: https://github.com/langchain-ai/chat-langchain/blob/master/parser.py (Lines: 37-40)
 
 **Comments**: 
 
@@ -759,9 +719,7 @@ language = next(
 ---
 ### *Example 12c*: Zip
   
- **Link**: langchain/parser.py
-
-**Lines**: 76-79
+ **Link**: langchain/parser.py (Lines: 76-79)
 
 **Comments**: 
 
@@ -779,9 +737,7 @@ for tab, tab_panel in zip(tabs, tab_panels):
 
 ### *Example 13a*:
   
- **Link**: https://github.com/langchain-ai/chat-langchain/blob/master/ingest.py
-
-**Lines**: 53-55
+ **Link**: https://github.com/langchain-ai/chat-langchain/blob/master/ingest.py (Lines: 53-55)
 
 **Comments**: 
 
@@ -796,9 +752,7 @@ def simple_extractor(html: str) -> str:
 ---
 ### *Example 13b*:
   
- **Link**: https://github.com/scrapy/scrapy/blob/master/scrapy/commands/startproject.py
-
-**Lines**: 45-49
+ **Link**: https://github.com/scrapy/scrapy/blob/master/scrapy/commands/startproject.py (Lines: 45-49)
 
 **Comments**: 
 
@@ -816,9 +770,7 @@ if not re.search(r"^[_a-zA-Z]\w*$", project_name):
 ---
 ### *Example 13c*:
   
- **Link**: https://github.com/scrapy/scrapy/blob/master/docs/utils/linkfix.py
-
-**Lines**: 20-64
+ **Link**: https://github.com/scrapy/scrapy/blob/master/docs/utils/linkfix.py (Lines: 20-64)
 
 **Comments**: 
 
