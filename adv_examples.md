@@ -17,21 +17,14 @@
 
 Using production code from the following projects for examples-
 
-**flask -**  The Python micro framework for building web applications.
-flask.palletsprojects.com 
-https://github.com/pallets/flask
-\
-**pydoit -** Task management & automation tool 
-https://github.com/pydoit/doit
-\
-**langchain -** A LangChain app that is an implementation of a locally hosted chatbot specifically focused on question answering over the LangChain documentation. Built with LangChain, FastAPI, and Next.js.
-https://github.com/langchain-ai/chat-langchain
-\
-**scrapy -** Scrapy, a fast high-level web crawling & scraping framework for Python.  
-https://github.com/scrapy/scrapy
+- **flask** - The Python micro framework for building web applications. [Official Site](https://flask.palletsprojects.com) | [GitHub](https://github.com/pallets/flask)
+- **pydoit** - Task management & automation tool. [GitHub](https://github.com/pydoit/doit)
+- **langchain** - A LangChain app that is an implementation of a locally hosted chatbot specifically focused on question answering over the LangChain documentation. Built with LangChain, FastAPI, and Next.js. [GitHub](https://github.com/langchain-ai/chat-langchain)
+- **scrapy** - Scrapy, a fast high-level web crawling & scraping framework for Python. [GitHub](https://github.com/scrapy/scrapy)
+
 
 ## 1. Decorators
-**Example 1a**:
+### *Example 1a*:
   
 **Link**: https://github.com/pydoit/doit/blob/master/doit/control.py
 
@@ -43,6 +36,7 @@ This code defines a decorator named no_none that's designed to filter out None v
 
 Inside the _func function, the generator decorated is called with any arguments (*args and **kwargs) passed to it. For each value produced by the decorated generator, if the value is not None, it is yielded by the _func generator.
 
+**Code**:
 ```python
 def no_none(decorated):
     """decorator for a generator to discard/filter-out None values"""
@@ -56,7 +50,7 @@ def no_none(decorated):
 
 ```
 
-**Example 1b**:
+### *Example 1b*:
   
 **Link**: https://github.com/pydoit/doit/blob/master/doc/samples/my_tasks.py
 
@@ -70,6 +64,7 @@ the 'simple' function is decorated without any parameters. So, an empty task_met
 
 the 'pre' function is decorated with a parameter output which is a list containing 'my_input.txt'. The task_metadata attribute of the pre function will be {'output': ['my_input.txt']}.
 
+**Code**:
 ```python
 def task(*fn, **kwargs):
     # decorator without parameters
@@ -99,7 +94,7 @@ def pre(to_create):
 
 ## 2. Generators
 
-**Example 2a**:
+### *Example 2a*:
   
 **Link**: https://github.com/pydoit/doit/blob/master/doc/samples/compile_pathlib.py
 
@@ -111,6 +106,7 @@ task_compile function uses the generator mechanism in Python to produce a series
 \
 The use of yield makes task_compile a generator function. Instead of returning a single value (like a list of tasks), it yields a series of values (each task, one by one).
 
+**Code**:
 ```python
 from pathlib import Path
 
@@ -128,7 +124,7 @@ def task_compile():
         }
 ```
 
-**Example 2b**:
+### *Example 2b*:
   
 **Link**: https://github.com/pydoit/doit/blob/master/doc/samples/subtasks.py
 
@@ -138,6 +134,7 @@ def task_compile():
 
 When you call this function, it will not execute the loop immediately. Instead, it will return a generator object. As you iterate over this generator (e.g., using a for loop or the next function), it will execute the loop and yield tasks one by one.
 
+**Code**:
 ```python
 def task_create_file():
     for i in range(3):
@@ -146,7 +143,7 @@ def task_create_file():
                'actions': ["touch %s" % filename]}
 ```
 
-**Example 2c**:
+### *Example 2c*:
   
 **Link**: https://github.com/pydoit/doit/blob/master/doit/control.py
 
@@ -156,6 +153,7 @@ def task_create_file():
 
 'step' method is designed to retrieve the next item from a generator (presumably an attribute of the class).
 
+**Code**:
 ```python
 def step(self):
     """get node's next step"""
@@ -169,7 +167,7 @@ def step(self):
 
 ## 3. Type Hinting
 
-**Example 3a**: Examples on this file from flask repo
+### *Example 3a*: Examples on this file from flask repo
   
 **Link**: https://github.com/pallets/flask/blob/main/src/flask/app.py
 
@@ -179,6 +177,7 @@ def step(self):
 
 The function signature includes a type hint indicating that the function returns a dictionary (dict).
 
+**Code**:
 ```python
 def make_shell_context(self) -> dict:
     """Returns the shell context for an interactive shell for this
@@ -211,6 +210,7 @@ def make_shell_context(self) -> dict:
   The function is expected to return an object that matches the type `t.IO[t.AnyStr]`.
 
 
+**Code**:
 ```python
 def open_instance_resource(self, resource: str, mode: str = "rb") -> t.IO[t.AnyStr]:
     """Opens a resource from the application's instance folder
@@ -231,7 +231,7 @@ def open_instance_resource(self, resource: str, mode: str = "rb") -> t.IO[t.AnyS
 ## 4. Extension on class basics
 ### (Class Attributes, Class Methods, Static Methods)
 
-**Example 4a**: class attributes
+### *Example 4a*: class attributes
   
 **Link**: https://github.com/pallets/flask/blob/master/tests/test_cli.py
 
@@ -241,6 +241,7 @@ def open_instance_resource(self, resource: str, mode: str = "rb") -> t.IO[t.AnyS
 
 A nested class MockCtx is defined within the test_get_version function. This class has two class attributes: resilient_parsing and color. 
 
+**Code**:
 ```python
 def test_get_version(test_apps, capsys):
     class MockCtx:
@@ -259,7 +260,7 @@ def test_get_version(test_apps, capsys):
 
 ```
 
-**Example 4b**: class methods 
+### *Example 4b*: class methods 
   
 **Link**: https://github.com/pydoit/doit/blob/master/doit/cmd_completion.py
 
@@ -267,6 +268,7 @@ def test_get_version(test_apps, capsys):
 
 **Comments**: 
 
+**Code**:
 ```python
 class TabCompletion(DoitCmdBase):
 
@@ -310,7 +312,7 @@ class TabCompletion(DoitCmdBase):
 
 ```
 
-**Example 4c**: static method
+### *Example 4c*: static method
   
 **Link**: https://github.com/pallets/flask/blob/master/tests/test_cli.py
 
@@ -318,6 +320,7 @@ class TabCompletion(DoitCmdBase):
 
 **Comments**: 
 
+**Code**:
 ```python
 def test_find_best_app(test_apps):
     class Module:
@@ -359,7 +362,7 @@ def test_find_best_app(test_apps):
 
 ## 5. Class Inheritance
 
-**Example 5a**:
+### *Example 5a*:
   
 **Link**: https://github.com/pydoit/doit/blob/master/doit/cmd_base.py
 
@@ -370,6 +373,7 @@ def test_find_best_app(test_apps):
 The class DoitCmdBase inherits from Command as indicated by the syntax class DoitCmdBase(Command). 
 
 
+**Code**:
 ```python
 class DoitCmdBase(Command):
     """
@@ -391,7 +395,7 @@ class DoitCmdBase(Command):
 
 ```
 
-**Example 5b**:
+### *Example 5b*:
   
 **Link**: https://github.com/pydoit/doit/blob/master/doc/samples/custom_loader.py
 
@@ -399,6 +403,7 @@ class DoitCmdBase(Command):
 
 **Comments**: 
 
+**Code**:
 ```python
 import sys
 
@@ -430,7 +435,7 @@ class MyLoader(TaskLoader2): # CLASS INHERITANCE
 
 ## 6. Duck Typing
 
-**Example 6a**:
+### *Example 6a*:
   
 **Link**: https://github.com/pydoit/doit/blob/master/doc/samples/custom_loader.py
 
@@ -440,6 +445,7 @@ class MyLoader(TaskLoader2): # CLASS INHERITANCE
 
 Subclasses of DoitCmdBase can provide specific implementations of the _execute method as mentioned in the docstring, showcasing polymorphism where the exact behavior of _execute can vary based on the subclass, while the calling code can interact with instances of DoitCmdBase and its subclasses in a uniform manner.
 
+**Code**:
 ```python
 class DoitCmdBase(Command):
     """
@@ -461,7 +467,7 @@ class DoitCmdBase(Command):
 
 ```
 
-**Example 6b**:
+### *Example 6b*:
   
 **Link**: 
 
@@ -469,6 +475,7 @@ class DoitCmdBase(Command):
 
 **Comments**: 
 
+**Code**:
 ```python
 # Python code for example 6b goes here
 ```
@@ -477,7 +484,7 @@ class DoitCmdBase(Command):
 
 ## 7. Properties
 
-**Example 7a**:
+### *Example 7a*:
   
 **Link**: https://github.com/pydoit/doit/blob/master/doit/cmd_base.py
 
@@ -488,6 +495,7 @@ class DoitCmdBase(Command):
 The @property decorator is used to define a method as a "getter" for a property named cmdparser. The method cmdparser is defined to lazily initialize and return a CmdParser instance, which is stored in the private attribute _cmdparser.
 Accessing cmdparser as an attribute (self.cmdparser) will invoke the method cmdparser(self) and return the _cmdparser instance. This encapsulates the logic for creating and caching the CmdParser instance behind a simple attribute access, making it easier and cleaner to use.
 
+**Code**:
 ```python
 class Command(object):
     """Base class for creating commands.
@@ -539,7 +547,7 @@ class Command(object):
 
 ## 8. Private Attributes
 
-**Example 8a**:
+### *Example 8a*:
   
 **Link**: https://github.com/langchain-ai/chat-langchain/blob/master/_scripts/evaluate_chains.py
 
@@ -549,6 +557,7 @@ class Command(object):
 
 The leading underscore in _get_llm_runs denotes that this method is intended to be private, meaning it's designed to be called only within the context of the CustomHallucinationEvaluator class or its subclasses.
 
+**Code**:
 ```python
 class CustomHallucinationEvaluator(RunEvaluator):
     @staticmethod
@@ -576,7 +585,7 @@ class CustomHallucinationEvaluator(RunEvaluator):
 
 ```
 
-**Example 8b**:
+### *Example 8b*:
   
 **Link**: 
 
@@ -584,6 +593,7 @@ class CustomHallucinationEvaluator(RunEvaluator):
 
 **Comments**: 
 
+**Code**:
 ```python
 # Python code for example 8b goes here
 ```
@@ -592,7 +602,7 @@ class CustomHallucinationEvaluator(RunEvaluator):
 
 ## 9. Lambda
 
-**Example 9a**: 
+### *Example 9a*: 
   
 **Link**: https://github.com/pallets/flask/blob/master/tests/test_json.py
 
@@ -600,6 +610,7 @@ class CustomHallucinationEvaluator(RunEvaluator):
 
 **Comments**: 
 
+**Code**:
 ```python
 def test_jsonify_uuid_types(app, client):
     """Test jsonify with uuid.UUID types"""
@@ -616,7 +627,7 @@ def test_jsonify_uuid_types(app, client):
     assert rv_uuid == test_uuid
 ```
 
-**Example 9b**:
+### *Example 9b*:
   
 **Link**: https://github.com/pydoit/doit/blob/master/doit/action.py
 
@@ -624,6 +635,7 @@ def test_jsonify_uuid_types(app, client):
 
 **Comments**: 
 
+**Code**:
 ```python
 # use task meta information as extra_args
 meta_args = {
@@ -639,7 +651,7 @@ meta_args = {
 
 ## 10. Recursion
 
-**Example 10a**:
+### *Example 10a*:
   
 **Link**: https://github.com/scrapy/scrapy/blob/master/scrapy/utils/misc.py
 
@@ -649,6 +661,7 @@ meta_args = {
 
 Through recursion, this function is able to load a module and all of its submodules, regardless of how deeply nested the submodule structure is. It does this by making recursive calls to walk_modules for each submodule that is also a package, accumulating the list of modules in the mods list, which is returned at the end.
 
+**Code**:
 ```python
 def walk_modules(path: str) -> List[ModuleType]:
     """Loads a module and all its submodules from the given module path and
@@ -673,7 +686,7 @@ def walk_modules(path: str) -> List[ModuleType]:
 
 ```
 
-**Example 10b**:
+### *Example 10b*:
   
 **Link**: 
 
@@ -681,6 +694,7 @@ def walk_modules(path: str) -> List[ModuleType]:
 
 **Comments**: 
 
+**Code**:
 ```python
 # Python code for example 10b goes here
 ```
@@ -689,7 +703,7 @@ def walk_modules(path: str) -> List[ModuleType]:
 
 ## 11. Context Managers
 
-**Example 11a**:
+### *Example 11a*:
   
 **Link**: https://github.com/pallets/flask/blob/master/examples/tutorial/tests/conftest.py
 
@@ -699,6 +713,7 @@ def walk_modules(path: str) -> List[ModuleType]:
 
 By using a context manager, the file is automatically closed when exiting the with block, even if an exception occurs within the block.
 
+**Code**:
 ```python
 # read in SQL for populating test data
 with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
@@ -710,7 +725,7 @@ with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
 
 ## 12. Map, Filter, and Zip Functions
 
-**Example 12a**: Map
+### *Example 12a*: Map
   
 **Link**: https://github.com/scrapy/scrapy/blob/master/docs/conf.py 
 
@@ -720,6 +735,7 @@ with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
 
 The map function is a handy way to apply a function (in this case, str for string conversion) to each element of a collection (in this case, a tuple of version numbers).
 
+**Code**:
 ```python
 try:
     import scrapy
@@ -731,7 +747,7 @@ except ImportError:
     release = ""
 ```
 
-**Example 12b**: Filter
+### *Example 12b*: Filter
   
 **Link**: https://github.com/langchain-ai/chat-langchain/blob/master/parser.py
 
@@ -741,6 +757,7 @@ except ImportError:
 
 filter returns an iterator that yields only the items from classes for which the lambda function returns True. In other words, it filters classes to include only the items that match the regular expression pattern r"language-\w+".
 
+**Code**:
 ```python
 language = next(
     filter(lambda x: re.match(r"language-\w+", x), classes),
@@ -748,7 +765,7 @@ language = next(
 )
 ```
 
-**Example 12c**: Zip
+### *Example 12c*: Zip
   
  **Link**: langchain/parser.py
 
@@ -758,6 +775,7 @@ language = next(
 
 zip(tabs, tab_panels) combines the iterables tabs and tab_panels element-wise into tuples. Each tuple contains one element from tabs and one element from tab_panels, paired up based on their position.
 
+**Code**:
 ```python
 for tab, tab_panel in zip(tabs, tab_panels):
     tab_name = tab.get_text(strip=True)
@@ -768,7 +786,7 @@ for tab, tab_panel in zip(tabs, tab_panels):
 
 ## 13. Regex
 
-**Example 13a**:
+### *Example 13a*:
   
  **Link**: https://github.com/langchain-ai/chat-langchain/blob/master/ingest.py
 
@@ -778,19 +796,24 @@ for tab, tab_panel in zip(tabs, tab_panels):
 
 This expression uses the re.sub function from the re module to clean up the extracted text. Specifically, it is replacing occurrences of two or more consecutive newline characters (\n\n+) with exactly two newline characters (\n\n).
 
+**Code**:
 ```python
 def simple_extractor(html: str) -> str:
     soup = BeautifulSoup(html, "lxml")
     return re.sub(r"\n\n+", "\n\n", soup.text).strip()
 ```
 
-**Example 13b**:
+### *Example 13b*:
   
- **Link**: scrapy/commands/startproject.py
+ **Link**: https://github.com/scrapy/scrapy/blob/master/scrapy/commands/startproject.py
 
-**Lines**: **Comments**: 
+**Lines**: 45-49
+
+**Comments**: 
+
 re.search(pattern, string) searches the string for any occurrence of the pattern. In this case, it searches project_name for a substring that matches the pattern.
 
+**Code**:
 ```python
 if not re.search(r"^[_a-zA-Z]\w*$", project_name):
     print(
@@ -800,16 +823,21 @@ if not re.search(r"^[_a-zA-Z]\w*$", project_name):
 ```
 
 
-**Example 13b**:
+### *Example 13c*:
   
- **Link**: scrapy/docs/utils/linkfix.py
+ **Link**: https://github.com/scrapy/scrapy/blob/master/docs/utils/linkfix.py
 
-**Lines**: **Comments**: This code seems to be related to fixing broken links in some output generated by a tool named linkcheck.
+**Lines**: 20-64
+
+**Comments**: 
+
+This code seems to be related to fixing broken links in some output generated by a tool named linkcheck.
 
 It uses regular expressions to parse the output of linkcheck. The pattern line_re is designed to match lines that look like standard linkcheck output. The code then iterates over each line of the linkcheck output and tries to match it with the regex pattern. If a match is found, it processes the line to fix the links.
 
 Also the code uses context managers - The code uses the with statement to open a file, which ensures that the file is properly closed after its usage finishes.
 
+**Code**:
 ```python
 def main():
     # Used for remembering the file (and its contents)
