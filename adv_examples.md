@@ -17,21 +17,13 @@
 
 Using production code from the following projects-
 
-- **Flask**: Flask is a lightweight and powerful micro web framework for Python. It is designed to make getting started quick and easy, with the ability to scale up to complex applications. It has a built-in development server and debugger, integrated unit testing support, and is fully Unicode-enabled with RESTful request dispatching and WSGI compliance.
-   - [Official Site](https://flask.palletsprojects.com)
-   - [GitHub](https://github.com/pallets/flask)
+- **Flask**: A lightweight Python micro web framework, perfect for quick setups yet scalable for complex applications ([Official Site](https://flask.palletsprojects.com) | [GitHub](https://github.com/pallets/flask)).
 
-- **pydoit**: pydoit is a task management and automation tool designed to be simple and easy to use. It allows you to define tasks and dependencies and then execute them in parallel. It's a flexible and versatile tool that can be used for build automation, continuous integration, and other scripting tasks.
-   - [Official Site](https://pydoit.org)
-   - [GitHub](https://github.com/pydoit/doit)
+- **pydoit**: A simple task management and automation tool that facilitates parallel execution of defined tasks and dependencies ([Official Site](https://pydoit.org) | [GitHub](https://github.com/pydoit/doit)).
 
-- **LangChain App**: This is an application built to provide an interface for querying and interacting with the LangChain documentation. It is a locally-hosted chatbot focused on answering questions over the LangChain documentation, built using LangChain, FastAPI, and Next.js, ensuring a responsive and user-friendly experience.
-   - [Official Site](https://www.langchain.com)
-   - [GitHub](https://github.com/langchain-ai/chat-langchain)
+- **LangChain App**: A locally-hosted chatbot for querying and interacting with LangChain documentation, built with LangChain, FastAPI, and Next.js ([Official Site](https://www.langchain.com) | [GitHub](https://github.com/langchain-ai/chat-langchain)).
 
-- **Scrapy**: Scrapy is an open-source and collaborative web crawling framework for Python. It's built to handle data extraction from websites, making it easy to build and scale large crawling projects. Scrapy also provides all the tools needed to extract data from websites, process them, and store them in your preferred format.
-   - [Official Site](https://scrapy.org)
-   - [GitHub](https://github.com/scrapy/scrapy)
+- **Scrapy**: An open-source web crawling framework in Python, ideal for data extraction from websites and large crawling projects ([Official Site](https://scrapy.org) | [GitHub](https://github.com/scrapy/scrapy)).
 
 
 
@@ -47,7 +39,7 @@ This code defines a decorator named no_none that's designed to filter out None v
 
 Inside the _func function, the generator decorated is called with any arguments (*args and **kwargs) passed to it. For each value produced by the decorated generator, if the value is not None, it is yielded by the _func generator.
 
-**Code**:
+ 
 ```python
 def no_none(decorated):
     """decorator for a generator to discard/filter-out None values"""
@@ -69,11 +61,11 @@ def no_none(decorated):
 
 The main purpose of this decorator seems to be to attach metadata to functions regarding their input and output files. This metadata can later be accessed using the task_metadata attribute of the decorated functions. This can be useful in scenarios where you want to keep track of the files a function interacts with, especially in data processing or pipeline workflows.
 
-the 'simple' function is decorated without any parameters. So, an empty task_metadata dictionary is attached to it.
+The 'simple' function is decorated without any parameters. So, an empty task_metadata dictionary is attached to it.
 
-the 'pre' function is decorated with a parameter output which is a list containing 'my_input.txt'. The task_metadata attribute of the pre function will be {'output': ['my_input.txt']}.
+The 'pre' function is decorated with a parameter output which is a list containing 'my_input.txt'. The task_metadata attribute of the pre function will be {'output': ['my_input.txt']}.
 
-**Code**:
+ 
 ```python
 def task(*fn, **kwargs):
     # decorator without parameters
@@ -113,7 +105,7 @@ task_compile function uses the generator mechanism in Python to produce a series
 \
 The use of yield makes task_compile a generator function. Instead of returning a single value (like a list of tasks), it yields a series of values (each task, one by one).
 
-**Code**:
+ 
 ```python
 from pathlib import Path
 
@@ -139,7 +131,7 @@ def task_compile():
 
 When you call this function, it will not execute the loop immediately. Instead, it will return a generator object. As you iterate over this generator (e.g., using a for loop or the next function), it will execute the loop and yield tasks one by one.
 
-**Code**:
+ 
 ```python
 def task_create_file():
     for i in range(3):
@@ -156,7 +148,7 @@ def task_create_file():
 
 'step' method is designed to retrieve the next item from a generator (presumably an attribute of the class).
 
-**Code**:
+ 
 ```python
 def step(self):
     """get node's next step"""
@@ -177,7 +169,7 @@ def step(self):
 
 The function signature includes a type hint indicating that the function returns a dictionary (dict).
 
-**Code**:
+ 
 ```python
 def make_shell_context(self) -> dict:
     """Returns the shell context for an interactive shell for this
@@ -191,7 +183,10 @@ def make_shell_context(self) -> dict:
         rv.update(processor())
     return rv
 ```
-**Lines**: 336-346
+
+### *Example 3b*: 
+
+**Link**: https://github.com/pallets/flask/blob/main/src/flask/app.py (Lines: 336-346)
 
 **Comments**: 
 
@@ -210,7 +205,7 @@ def make_shell_context(self) -> dict:
   The function is expected to return an object that matches the type `t.IO[t.AnyStr]`.
 
 
-**Code**:
+ 
 ```python
 def open_instance_resource(self, resource: str, mode: str = "rb") -> t.IO[t.AnyStr]:
     """Opens a resource from the application's instance folder
@@ -239,7 +234,7 @@ def open_instance_resource(self, resource: str, mode: str = "rb") -> t.IO[t.AnyS
 
 A nested class MockCtx is defined within the test_get_version function. This class has two class attributes: resilient_parsing and color. 
 
-**Code**:
+ 
 ```python
 def test_get_version(test_apps, capsys):
     class MockCtx:
@@ -264,7 +259,7 @@ def test_get_version(test_apps, capsys):
 
 **Comments**: 
 
-**Code**:
+ 
 ```python
 class TabCompletion(DoitCmdBase):
 
@@ -314,7 +309,7 @@ class TabCompletion(DoitCmdBase):
 
 **Comments**: 
 
-**Code**:
+ 
 ```python
 def test_find_best_app(test_apps):
     class Module:
@@ -364,7 +359,7 @@ def test_find_best_app(test_apps):
 The class DoitCmdBase inherits from Command as indicated by the syntax class DoitCmdBase(Command). 
 
 
-**Code**:
+ 
 ```python
 class DoitCmdBase(Command):
     """
@@ -392,7 +387,7 @@ class DoitCmdBase(Command):
 
 **Comments**: 
 
-**Code**:
+ 
 ```python
 import sys
 
@@ -431,7 +426,7 @@ class MyLoader(TaskLoader2): # CLASS INHERITANCE
 
 Subclasses of DoitCmdBase can provide specific implementations of the _execute method as mentioned in the docstring, showcasing polymorphism where the exact behavior of _execute can vary based on the subclass, while the calling code can interact with instances of DoitCmdBase and its subclasses in a uniform manner.
 
-**Code**:
+ 
 ```python
 class DoitCmdBase(Command):
     """
@@ -461,7 +456,7 @@ class DoitCmdBase(Command):
 
 **Comments**: 
 
-**Code**:
+ 
 ```python
 # Python code for example 6b goes here
 ```
@@ -478,7 +473,7 @@ class DoitCmdBase(Command):
 The @property decorator is used to define a method as a "getter" for a property named cmdparser. The method cmdparser is defined to lazily initialize and return a CmdParser instance, which is stored in the private attribute _cmdparser.
 Accessing cmdparser as an attribute (self.cmdparser) will invoke the method cmdparser(self) and return the _cmdparser instance. This encapsulates the logic for creating and caching the CmdParser instance behind a simple attribute access, making it easier and cleaner to use.
 
-**Code**:
+ 
 ```python
 class Command(object):
     """Base class for creating commands.
@@ -537,7 +532,7 @@ class Command(object):
 
 The leading underscore in _get_llm_runs denotes that this method is intended to be private, meaning it's designed to be called only within the context of the CustomHallucinationEvaluator class or its subclasses.
 
-**Code**:
+ 
 ```python
 class CustomHallucinationEvaluator(RunEvaluator):
     @staticmethod
@@ -573,7 +568,7 @@ class CustomHallucinationEvaluator(RunEvaluator):
 
 **Comments**: 
 
-**Code**:
+ 
 ```python
 # Python code for example 8b goes here
 ```
@@ -587,7 +582,7 @@ class CustomHallucinationEvaluator(RunEvaluator):
 
 **Comments**: 
 
-**Code**:
+ 
 ```python
 def test_jsonify_uuid_types(app, client):
     """Test jsonify with uuid.UUID types"""
@@ -610,7 +605,7 @@ def test_jsonify_uuid_types(app, client):
 
 **Comments**: 
 
-**Code**:
+ 
 ```python
 # use task meta information as extra_args
 meta_args = {
@@ -633,7 +628,7 @@ meta_args = {
 
 Through recursion, this function is able to load a module and all of its submodules, regardless of how deeply nested the submodule structure is. It does this by making recursive calls to walk_modules for each submodule that is also a package, accumulating the list of modules in the mods list, which is returned at the end.
 
-**Code**:
+ 
 ```python
 def walk_modules(path: str) -> List[ModuleType]:
     """Loads a module and all its submodules from the given module path and
@@ -666,7 +661,7 @@ def walk_modules(path: str) -> List[ModuleType]:
 
 **Comments**: 
 
-**Code**:
+ 
 ```python
 # Python code for example 10b goes here
 ```
@@ -682,7 +677,7 @@ def walk_modules(path: str) -> List[ModuleType]:
 
 By using a context manager, the file is automatically closed when exiting the with block, even if an exception occurs within the block.
 
-**Code**:
+ 
 ```python
 # read in SQL for populating test data
 with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
@@ -701,7 +696,7 @@ with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
 
 The map function is a handy way to apply a function (in this case, str for string conversion) to each element of a collection (in this case, a tuple of version numbers).
 
-**Code**:
+ 
 ```python
 try:
     import scrapy
@@ -721,7 +716,7 @@ except ImportError:
 
 filter returns an iterator that yields only the items from classes for which the lambda function returns True. In other words, it filters classes to include only the items that match the regular expression pattern r"language-\w+".
 
-**Code**:
+ 
 ```python
 language = next(
     filter(lambda x: re.match(r"language-\w+", x), classes),
@@ -737,7 +732,7 @@ language = next(
 
 zip(tabs, tab_panels) combines the iterables tabs and tab_panels element-wise into tuples. Each tuple contains one element from tabs and one element from tab_panels, paired up based on their position.
 
-**Code**:
+ 
 ```python
 for tab, tab_panel in zip(tabs, tab_panels):
     tab_name = tab.get_text(strip=True)
@@ -755,7 +750,7 @@ for tab, tab_panel in zip(tabs, tab_panels):
 
 This expression uses the re.sub function from the re module to clean up the extracted text. Specifically, it is replacing occurrences of two or more consecutive newline characters (\n\n+) with exactly two newline characters (\n\n).
 
-**Code**:
+ 
 ```python
 def simple_extractor(html: str) -> str:
     soup = BeautifulSoup(html, "lxml")
@@ -770,7 +765,7 @@ def simple_extractor(html: str) -> str:
 
 re.search(pattern, string) searches the string for any occurrence of the pattern. In this case, it searches project_name for a substring that matches the pattern.
 
-**Code**:
+ 
 ```python
 if not re.search(r"^[_a-zA-Z]\w*$", project_name):
     print(
@@ -792,7 +787,7 @@ It uses regular expressions to parse the output of linkcheck. The pattern line_r
 
 Also the code uses context managers - The code uses the with statement to open a file, which ensures that the file is properly closed after its usage finishes.
 
-**Code**:
+ 
 ```python
 def main():
     # Used for remembering the file (and its contents)
