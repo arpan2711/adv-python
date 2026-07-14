@@ -4,3 +4,4 @@
 # Don't ignore myFile.txt
 !adv_examples.md
 !arpans_context_managers.ipynb
+!README.md
